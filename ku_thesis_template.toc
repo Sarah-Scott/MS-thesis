@@ -1,0 +1,18 @@
+\babel@toc {english}{}\relax 
+\contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}%
+\contentsline {chapter}{\numberline {2}Background}{2}{chapter.2}%
+\contentsline {section}{\numberline {2.1}TPM 2.0}{2}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}Keys}{3}{subsection.2.1.1}%
+\contentsline {section}{\numberline {2.2}Inductive Propositions}{5}{section.2.2}%
+\contentsline {chapter}{\numberline {3}Secure Device Identity}{6}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Certificate Chain}{7}{section.3.1}%
+\contentsline {chapter}{\numberline {4}Identity Provisioning}{9}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Protocols}{9}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}OEM Creation of IAK Certificate based on EK Certificate}{9}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.1.2}Owner/Administrator Creation of LAK Certificate based on IAK Certificate}{9}{subsection.4.1.2}%
+\contentsline {section}{\numberline {4.2}Assurances}{9}{section.4.2}%
+\contentsline {chapter}{\numberline {5}Conclusion}{10}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Conclusion}{10}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Future Work}{10}{section.5.2}%
+\contentsline {chapter}{\numberline {A}Misc stuff}{12}{appendix.A}%
+\contentsline {chapter}{\numberline {B}Misc Stuff 2}{13}{appendix.B}%

@@ -1,0 +1,41 @@
+\begin{thebibliography}{}
+
+\bibitem[Arthur et~al., 2015]{PracticalGuide}
+Arthur, W., Challener, D., \& Goldman, K. (2015).
+\newblock {\em A Practical Guide to TPM 2.0: Using the Trusted Platform Module
+  in the New Age of Security}.
+\newblock Apress.
+
+\bibitem[Barker, 2020]{KeyManagement}
+Barker, E. (2020).
+\newblock Recommendation for key management.
+\newblock {\em NIST Special Publication 800-57 Part 1 Revision 5}.
+
+\bibitem[{Institute of Electrical and Electronics Engineers},
+  2018]{DevIDSpec-IEEE}
+{Institute of Electrical and Electronics Engineers} (2018).
+\newblock {IEEE Standard for Local and Metropolitan Area Networks - Secure
+  Device Identity}.
+\newblock {\em IEEE Std 802.1AR-2018}.
+
+\bibitem[Pierce et~al., 2022]{LogicalFoundations}
+Pierce, B.~C., de~Amorim, A.~A., Casinghino, C., Gaboardi, M., Greenberg, M.,
+  Hri{\c t}cu, C., Sj{\"o}berg, V., \& Yorgey, B. (2022).
+\newblock {\em Logical Foundations}.
+\newblock Software Foundations series, volume 1. Electronic textbook.
+
+\bibitem[{Trusted Computing Group}, 2019]{TPMSpec}
+{Trusted Computing Group} (2019).
+\newblock {\em Trusted Platform Module Library Specification, Family 2.0, Level
+  00, Revision 01.59}.
+
+\bibitem[{Trusted Computing Group}, 2021a]{EKSpec}
+{Trusted Computing Group} (2021a).
+\newblock {\em TCG EK Credential Profile For TPM Family 2.0, Level 00, Version
+  2.4, Revision 3}.
+
+\bibitem[{Trusted Computing Group}, 2021b]{DevIDSpec-TCG}
+{Trusted Computing Group} (2021b).
+\newblock {\em TPM 2.0 Keys for Device Identity and Attestation}.
+
+\end{thebibliography}
