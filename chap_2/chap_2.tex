@@ -4,39 +4,81 @@
 \section{TPM 2.0}
 
 A Trusted Platform Module (TPM) is a microcontroller that complies with the ISO/IEC 11889:2015 international standard.
-The TPM and its specification was designed by the Trusted Computing Group (TCG) to act as a hardware anchor for PC system security [\cite{{PracticalGuide}}]. To this end, TPMs contain the abilities necessary for secure generation of keys, secure storage of keys, NVRAM storage, algorithm agility, enhanced authorization, device health attestation, device identification, and more.
+The TPM and its specification were designed by the Trusted Computing Group (TCG) to act as a hardware anchor for PC system security [\cite{{PracticalGuide}}]. To this end, TPMs have the abilities necessary for secure generation of keys, algorithm agility, secure storage of keys, enhanced authorization, device health attestation, device identification, NVRAM storage and more. 
+
+The TPM's key generator is based on its own random number generator (RNG) so that it does not rely on external sources of randomness. These keys can be used for a multitude of purposes and may be created or destroyed as often as needed. Due to algorithm agility, the TPM can use nearly any cryptographic algorithm. As a result, keys may utilize asymmetric algorithms such as RSA or ECC, or they may utilize symmetric algorithms such as AES or DES. Additionally, a variety of key strengths (i.e., key sizes) and hash algorithms may be used. By design, keys stored within the TPM are protected against software attacks. Keys may optionally be further protected using enhanced authorization (EA). EA allows a key or other TPM entity to be authorized using a password, HMAC, or policy. This flexibility allows for varying complexities in the requirements for accessing an entity. 
 
 
-In order to understand device identification, we must first look at a simplified version of the process for creating and distributing TPMs to the end user. The following capitalized titles of TPM Manufacturer, OEM, and Owner/Administrator are keywords that will be referenced throughout this paper. 
+Device health attestation data provided by a TPM offers cryptographic proof of software state. Attestation data comes in the form of a quote which is a signed hash over a selection of platform configuration registers (PCRs). PCRs store the results from a chain of boot time measurements in a way that guarantees integrity. In particular, a PCR cannot be rolled back to a previous value resulting in a measurement being undone. To tie attestation data to a specific device, the key that performed the signing operation must be cryptographically bound to that device. In order to understand this idea of device identification, we must look at a simplified version of the process for creating and distributing TPMs to the end user. The following capitalized titles of TPM Manufacturer, OEM, and Owner/Administrator are keywords that will be referenced throughout this paper. 
 \begin{enumerate}
-  \item\label{ite:makeTPM} TPM Manufacturers produce TPM chips according to the international standard.
-  \item\label{ite:sendTPM} These TPM chips are distributed to the original equipment manufacturers (OEMs).
-  \item\label{ite:makeDevice} OEMs produce devices (e.g., PCs) with these TPM chips integrated.
-  \item\label{ite:sendDevice} These devices are distributed to the end users (Owners/Administrators).
+  \item\label{ite:idTPM} TPM Manufacturers produce TPM chips according to the international standard. They provision each TPM chip with one or more certificates which bind a key to that specific TPM. These chips are then distributed to the original equipment manufacturers (OEMs).
+  \item\label{ite:idDevIni} OEMs produce devices (e.g., PCs) with these TPM chips integrated. They provision each TPM chip with one or more certificates which bind a key to that specific device. These devices are then distributed to the end users (Owners/Administrators).
+  \item\label{ite:idDevLoc} Owners/Administrators may optionally provision their TPM chip(s) with one or more certificates which bind a key to that specific device.
 \end{enumerate} 
-Steps \ref{ite:makeTPM} and \ref{ite:makeDevice} each include a procedure for provisioning keys for identification. In particular, the TPM Manufacturer will supply identification for the TPM in step \ref{ite:makeTPM}, and the OEM will supply identification for the device in step \ref{ite:makeDevice}.
+These certificates are stored within the TPM's NVRAM providing protection from accidental erasure in the scenario that the device's hard drive gets wiped. The provisioning of device identification in Steps \ref{ite:idDevIni} and \ref{ite:idDevLoc} is the subject of this paper.
+
+
+
 
 
 
 \subsection{Keys}
 
-All keys discussed in this document utilize asymmetric cryptography. Although the TPM 2.0 has capabilities for utilizing symmetric keys, it is outside the scope of this paper.
-
-A TPM key may be created using one of two commands.
+All keys discussed in this document are TPM keys which utilize asymmetric cryptography. Although the TPM 2.0 has capabilities for utilizing symmetric keys, it is outside the scope of this paper. A key may be created using one of two commands.
 \begin{itemize}
-  \item \texttt{TPM2\_CreatePrimary}: A Primary key is produced based on the current Primary Seed. A Primary key may be persisted within the TPM. Otherwise it must be recreated after a TPM reset.
-  \item \texttt{TPM2\_Create}: An Ordinary key is produced based on a seed taken from the TPM random number generator (RNG). An Ordinary key must be the child of another key. It may be persisted within the TPM or persisted external to the TPM in the form of an encrypted key blob. The blob is only loadable using the parent key's authorization in the TPM that created it.
+  \item \verb|TPM2_CreatePrimary|: A Primary key is produced based on the current Primary Seed. A Primary key may be persisted within the TPM. Otherwise it must be recreated after a TPM reset.
+  \item \verb|TPM2_Create|: An Ordinary key is produced based on a seed taken from the RNG. An Ordinary key is the child of another key; it is wrapped by that parent key. It may be persisted within the TPM or persisted external to the TPM in the form of an encrypted key blob. The blob is only loadable using the parent key's authorization in the TPM that created it.
 \end{itemize}
 
-Keys have attributes that are set at creation-time. These attributes are permanent and include the following: \texttt{FixedTPM}, \texttt{Sign}, \texttt{Decrypt}, \texttt{Restricted}, amongst others. The \texttt{FixedTPM} attribute indicates that the private key cannot be duplicated. All keys considered in this paper have this attribute set. A TPM key pair with the \texttt{Sign} attribute set consists of a private signing key and a public signature-verification key. When properly handled, private signing keys can provide integrity, authenticity, and nonrepudiation. A TPM key pair with the \texttt{Decrypt} attribute set consists of a public encryption key and a private decryption key. When properly handled, public encryption keys can provide confidentiality. A key with both the \texttt{Sign} and \texttt{Decrypt} attributes set is called a Combined key. US NIST SP800-57 disallows the use of Combined keys for the reason that it may weaken the security guarantees associated with one or both of the attributes. Moreover, a TPM key pair may have the \texttt{Restricted} attribute set, limiting the operations of the private key to TPM generated data.
+Keys have attributes that are set at creation-time. These attributes are permanent and include the following: \verb|FixedTPM|, \verb|Sign|, \verb|Decrypt|, \verb|Restricted|. The \verb|FixedTPM| attribute indicates that the private key cannot be duplicated. All keys considered in this paper have this attribute set. A key pair with the \verb|Sign| attribute set consists of a private signing key and a public signature-verification key. When properly handled, private signing keys can provide integrity, authenticity, and nonrepudiation. A key pair with the \verb|Decrypt| attribute set consists of a public encryption key and a private decryption key. When properly handled, public encryption keys can provide confidentiality. A key with both the \verb|Sign| and \verb|Decrypt| attributes set is called a Combined key. US NIST SP800-57 disallows the use of Combined keys for the reason that it may weaken the security guarantees associated with one or both of the attributes. Moreover, a key pair may have the \verb|Restricted| attribute set, limiting the operations of the private key to TPM generated data.
 
-The \texttt{Restricted} attribute can provide important security implications. A restricted signing key may only sign a digest that has been produced by the TPM. Enforcement of this constraint is reliant on a 4-byte magic value called \texttt{TPM\_Generated} [\cite{TPMSpec}]. All structures that the TPM constructs from internal data begins with this value. Such structures include keys, platform configuration registers (PCRs), and audit digests. These structures contribute to two primary use cases for restricted signing keys: (1) key certification and (2) attestation. Use case (1) proves that a new key resides in the same TPM as some known restricted key. Use case (2) utilizes the \texttt{Restricted} attribute to provide assurance that a signature over PCRs or audit logs was in fact over a digest generated by that particular TPM. Additionally, a restricted signing key can sign data supplied to the TPM externally by using the \texttt{TPM2\_Hash} command. In this case the \texttt{TPM2\_Hash} command produces a ticket asserting that the TPM itself calculated this hash and will later sign it. A restricted signing key will not sign external data without this ticket. To prevent spoofing of the two primary use cases described above, the \texttt{TPM2\_Hash} command will only produce a ticket if the external data does not begin with the \texttt{TPM\_Generated} value.
+The Coq model inductively defines a \verb|pubKey| and \verb|privKey| type for public keys and private keys respectively. A key of either of these types requires a unique identifier and a sequence of boolean values describing whether a particular attribute is set or not set. A key pair consists of a \verb|pubKey| and a \verb|privKey| with the same identifier and attributes. The model does not differentiate between Primary and Ordinary keys.
+\begin{figure}[h]
+  \begin{lstlisting}[language=Coq]
+Inductive pubKey : Type :=
+| Public : keyID -> Restricted -> Sign -> Decrypt -> pubKey.
+\end{lstlisting}
 
-A restricted decryption key is called a storage key. Only storage keys can be used as parents to create or load child objects or to activate credentials [\cite{PracticalGuide}]. All TPMs are shipped with an essential storage key: the endorsement key. The endorsement key (EK) is installed by the TPM manufacturer and stored in a shielded location on the TPM. The corresponding EK certificate serves a significant role in the enrollment of secure device identifiers. This process will be discussed in further detail in later sections.
+\begin{lstlisting}[language=Coq]
+Inductive privKey : Type :=
+| Private : keyID -> Restricted -> Sign -> Decrypt -> privKey.
+\end{lstlisting}
 
-A certificate contains an identity and a public key and is signed by a trusted certificate authority. The term certificate specifically refers to an X.509 v3 digital certificate. The EK certificate includes the public part of the EK itself as well as various assertions regarding the security qualities and provenance of the TPM [\cite{EKSpec}]. The EK certificate binds a specific TPM to an EK. For keys created by entities other than the TPM manufacturer, a certificate's identity field will contain non-TPM device information. This information should be globally unique per device [\cite{DevIDSpec-IEEE}].
+\caption{Model of Keys}
+\end{figure}
+
+
+The \verb|Restricted| attribute can provide important security implications. A restricted signing key may only sign a digest that has been produced by the TPM. Enforcement of this constraint is reliant on a 4-byte magic value called \verb|TPM_Generated| [\cite{TPMSpec}]. All structures that the TPM constructs from internal data begins with this value. Such structures include keys, platform configuration registers (PCRs), and audit digests. These structures contribute to two primary use cases for restricted signing keys: (1) key certification and (2) attestation. Use case 1 proves that a new key resides in the same TPM as some known restricted key. Use case 2 utilizes the \verb|Restricted| attribute to provide assurance that a signature over PCRs or audit logs was in fact over a digest generated by that particular TPM. Additionally, a restricted signing key can sign data supplied to the TPM externally by using the \verb|TPM2_Hash| command. In this case the \verb|TPM2_Hash| command produces a ticket asserting that the TPM itself calculated this hash and will later sign it. A restricted signing key will not sign external data without this ticket. To prevent spoofing of another TPM's internal data as one's own, the \verb|TPM2_Hash| command will only produce a ticket if the external data does not begin with the \verb|TPM_Generated| value.
+
+A restricted decryption key is called a storage key. Only storage keys can be used as parents to create or load child objects or to activate credentials [\cite{PracticalGuide}]. All TPMs are shipped with an essential storage key: the endorsement key. The endorsement key (EK) is installed by the TPM Manufacturer and stored in a shielded location on the TPM. The corresponding EK certificate serves a significant role in the enrollment of secure device identifiers. This process will be discussed in further detail in later sections.
+
+
+
+
+
+
+
+A certificate contains a public key and an identity and is signed by a trusted certificate authority. A certificate binds a public key to an identity. The term certificate specifically refers to an X.509 v3 digital certificate. 
+The EK certificate includes the public part of the EK itself as well as various assertions regarding the security qualities and provenance of the TPM [\cite{EKSpec}]. The EK certificate binds the EK to a specific TPM. For keys created by entities other than the TPM manufacturer (i.e., the OEM and the Owner/Administrator), a certificate's identity field will contain non-TPM device information. This information should be globally unique per device [\cite{DevIDSpec-IEEE}]. In this model, certificates are defined as the \verb|signedCert| type. A \verb|signedCert| requires a public key, an identifier, and a private key. An identifier may include include information describing either the TPM or the device. The private key parameter denotes the key which performed the signature over the certificate.
+\begin{figure}[h]
+\begin{lstlisting}[language=Coq]
+Inductive signedCert : Type :=
+| Cert : pubKey -> identifier -> privKey -> signedCert.
+\end{lstlisting}
+
+\begin{lstlisting}[language=Coq]
+Inductive identifier : Type :=
+| TPM_info : tpmInfoType -> identifier
+| Device_info : deviceInfoType -> identifier.
+\end{lstlisting}
+\caption{Model of Certificates}
+\end{figure}
+
+
+
 
 
 \section{Inductive Propositions}
+
 
 [\cite{LogicalFoundations}]

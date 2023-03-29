@@ -1,11 +1,89 @@
-\chapter{Identity Provisioning}
 
-\section{Protocols}
+\chapter{Execution Model}
 
-\subsection{OEM Creation of IAK Certificate based on EK Certificate}
+The protocols used to enroll DevID certificates require both TPM and non-TPM commands to be performed by the CA and the requesting device. A command may rely on a variety of parameters such as keys, nonces, certificates, as well as other messages. A message includes all of the structures that an entity may use or produce. The \verb|message| type is 
+\begin{figure}[h]
+\begin{lstlisting}[language=Coq]
+Inductive message : Type :=
+| publicKey : pubKey -> message
+| privateKey : privKey -> message
+| hash : message -> message
+| signature : message -> privKey -> message
+| TPM2B_Attest : pubKey -> message
+| encryptedCredential : message -> randType -> pubKey -> message
+| randomNum : randType -> message
+| TCG_CSR_IDevID : identifier -> signedCert -> pubKey -> message
+| TCG_CSR_LDevID : message -> signedCert -> message
+| signedCertificate : signedCert -> message
+| pair : message -> message -> message.
+\end{lstlisting}
+\caption{Model of Messages}
+\end{figure}
+an abstract representation of these structures. From a message, additional messages may be inferred. For example, given a message \verb|signature m k|, \verb|m| may be deduced. Whereas given a message \verb|encryptedCredential m g k|, no messages may be deduced. This concept is modeled in two ways: as a recursive function \verb|inferFrom| and as an inductive proposition \verb|inferrable|. These two definitions are proven to be equivalent (see Appendix A for definitions and proof). In particular, additional information may be gained from signatures, TPM2B\_Attest structures, certificate signing requests (CSRs), public key certificates, and pairs of messages. All other messages either contain no additional information (i.e., keys and random numbers) or the information is concealed (i.e., hash digests and encryptions).
 
 
 
-\subsection{Owner/Administrator Creation of LAK Certificate based on IAK Certificate}
+Each command and its execution is modeled abstractly. We do not attempt to model the computational intricacies of true cryptography. Command execution is defined as an inductive proposition relating an initial state, a command, and a final state.  
+\begin{figure}[h]
+\begin{lstlisting}[language=Coq]
+Inductive execute : tpm_state * state -> command -> tpm_state * state -> Prop
+\end{lstlisting}
+\caption{Type Signature of Execute Relation}
+\end{figure}
+The \verb|tpm_state| and \verb|state| types are aliases for a list of messages. These types are implemented as a list only for convenience; they are treated as a set in all practical aspects (i.e., ordering and duplicates are ignored). TPM state contains all messages produced by a command performed on an entity's own TPM. Whereas the general state contains all messages known to an entity and is correspondingly a superset of the TPM state.
 
-\section{Assurances}
+
+\begin{figure}[h]
+\begin{lstlisting}[language=Coq]
+Inductive command : Type :=
+| CheckAttributes : pubKey -> Restricted -> Sign -> Decrypt -> command
+| TPM2_Hash : message -> command
+| CheckHash : message -> message -> command
+| TPM2_Sign : message -> privKey -> command
+| TPM2_Certify : pubKey -> privKey -> command
+| CheckSig : message -> pubKey -> command
+| MakeCSR_IDevID : identifier -> signedCert -> pubKey -> command
+| MakeCSR_LDevID : message -> signedCert -> command
+| CheckCert : signedCert -> pubKey -> command
+| MakePair : message -> message -> command
+| CheckRandom : message -> randType -> command
+| TPM2_ActivateCredential : message -> privKey -> privKey -> command.
+\end{lstlisting}
+\caption{Model of Commands}
+\end{figure}
+
+The \verb|CheckAttributes| command verifies that a public key has all of the provided attributes. In practice, this is done by checking the \verb|TPMA_Object|  bits. In the model, these values are stored within the \verb|Restricted|, \verb|Sign|, and \verb|Decrypt| fields of the \verb|pubKey| type. In order to check the attributes of a particular key, one must have have knowledge of that key. Specifically the public key to be checked must be in its state.
+
+The \verb|TPM2_Hash| command performs a cryptographic hash operation on a piece of data. This data may be any message that is known to the entity performing the command. The result of the operation is abstractly defined using the opaque \verb|hash| constructor. In fact only one command may be used to determine the contents of a hash digest, that is, the \verb|CheckHash| command which verifies that the contents of a hash digest match a particular plaintext message. The hash digest and the plaintext message must both be in state. 
+
+The \verb|TPM2_Sign| command generates a signature over a message using the specified private key. There are several conditions for successful execution. For one, the key must have the \verb|Sign| attribute set. Additionally, the key must reside in the TPM. If the key has the \verb|Restricted| attribute not set, then the message must simply be in state. On the other hand, if the key does have the \verb|Restricted| attribute set, then the message must have been produced by the TPM and be in the TPM state. As described in Section 2.1.1, a restricted signing key may sign external data if and only if the TPM first performed a hash operation on the data. In practice, the \verb|TPM2_Hash| command would produce a ticket containing a validation structure which indicates that the resulting hash was produced by the TPM and is safe to sign. This ticket is then passed to the \verb|TPM2_Sign| command. In the model, these tickets are handled implicitly: the hash digest produced by \verb|TPM2_Hash| is added to the TPM state so that the restricting sign key may then sign the external data. 
+
+The \verb|TPM2_Certify| command proves than an object is loaded in the TPM by producing a signed \verb|TPM2B_Attest| structure. The command requires two inputs: a public key to be certified and a private key to sign the attestation structure. The private key must have the \verb|Sign| attribute set and must reside in the TPM. Upon recieving a request to execute the \verb|TPM2_Certify| command, the TPM will verify that the inverse of the public key parameter resides in the TPM as well. Messages produced by the \verb|TPM2_Sign| and \verb|TPM2_Certify| commands are defined using the \verb|signature| constructor. A signature may be verified against a public key using the \verb|CheckSig| command. If the provided public key is the inverse of the private key which performed the signature, then the check succeeds.
+
+The \verb|MakeCSR_IDevID| command produces a \verb|TCG_CSR_IDevID| structure containing the provided inputs. 
+ A \verb|TCG_CSR_IDevID| is a certificate signing request (CSR) which contains the data required to couple an IAK to a TPM-containing device. Additionally, it may include the certification information for an IDevID if one wishes to produce both the IAK and IDevID certificates in a single pass. In particular, this structure is used any time an enrollment process uses the EK certificate. The Trusted Computing Group (TCG) defines a C typedef structure to group all of the fields. In the model, we only include the fields necessary for creating an IAK certificate (i.e., device-identifying information, the EK certificate, and a public key to be certified). The \verb|MakeCSR_LDevID| command is very similar to the \verb|MakeCSR_IDevID| command except it produces a \verb|TCG_CSR_LDevID| structure which includes the certification information for an LAK or LDevID. In the model, we only include the fields necessary for creating an LAK certificate (i.e., a signed \verb|TPM2B_Attest| structure and the IAK certificate).
+
+The \verb|CheckCert| command verifies a signature over a certificate against a public key. One should check an EK certificate against the public key of the TPM Manufacturer's CA, an IAK or IDevID certificate against the public key of the OEM's CA, and an LAK or LDevID certificate against the public key of the Owner/Administrator's CA.
+
+The \verb|MakePair| command combines two messages into a single message using the \verb|pair| constructor.
+
+
+
+
+Due to the abstract, symbolic nature of this model, several TPM commands are intentionally excluded from the \verb|command| type. This results specifically from an inability to truly capture the cryptographic properties of randomness. Randomness plays a vital role in the real-life implementation of keys and nonces, that is, it prevents a key or nonce from being guessed. Since we are unable to preserve this property in our model, we choose to eliminate all commands which generate a key or nonce. Therefore, a message of either of these types must be inferred from some other message or be in the initial state. 
+
+The \verb|TPM2_GetRandom| command retrieves random bytes from the TPM. These resulting bytes may be used as a nonce. Due to the reason described above, we do not include this command explicitly in our model, although we do assume it is used by the CA in some protocols. 
+
+
+
+%The \verb|CheckRandom| command verifies that a provided random number matches a particular golden value. The golden value is a nonce which must have been produced by one's own TPM. 
+
+The \verb|TPM2_MakeCredential| command
+
+The \verb|TPM2_ActivateCredential| command
+
+% We pick an arbitrary data type to abstract away this randomness. In this case, we choose to utilize the naturals. There are two significant data types in this model which are defined in this way: \verb|keyIdType| and \verb|randType|. The abstract \verb|keyIdType| is sufficient in providing a value by which keys may be differentiated. Similarly, the \verb|randType| may be used to differentiate nonces. The major limitation in this modeling technique is that it does not express the extremely small probability associated with correctly guessing a key or nonce.
+
+%
+
+
