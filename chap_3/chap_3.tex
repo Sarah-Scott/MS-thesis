@@ -77,7 +77,7 @@ A chain of certificates can be used to verify a chain of trust to some trust anc
   \label{fig:cert_rel}
 \end{figure}
 
-\begin{itemize}
+\begin{itemize}[itemsep=0pt,parsep=0pt,partopsep=0pt]
   \item Box 1: The EK certificate is signed by the TPM Manufacturer's CA and binds the EK to a specific TPM.
   \item Line A: The IAK is verified by the OEM's CA to have the correct key properties and to be resident in the same TPM as the EK.
   \item Line B: The IDevID is verified by the OEM's CA to have the correct key properties and to be resident in the same TPM as the IAK.

@@ -7,11 +7,11 @@
 \contentsline {chapter}{\numberline {3}Secure Device Identity}{7}{chapter.3}%
 \contentsline {section}{\numberline {3.1}Certificate Chain}{8}{section.3.1}%
 \contentsline {chapter}{\numberline {4}Execution Model}{10}{chapter.4}%
-\contentsline {chapter}{\numberline {5}Identity Provisioning}{15}{chapter.5}%
-\contentsline {section}{\numberline {5.1}OEM Creation of IAK Certificate based on EK Certificate}{15}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Owner/Administrator Creation of LAK Certificate based on IAK Certificate}{15}{section.5.2}%
-\contentsline {chapter}{\numberline {6}Conclusion}{16}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Conclusion}{16}{section.6.1}%
-\contentsline {section}{\numberline {6.2}Future Work}{16}{section.6.2}%
-\contentsline {chapter}{\numberline {A}Model of Inference}{18}{appendix.A}%
-\contentsline {chapter}{\numberline {B}Misc Stuff 2}{20}{appendix.B}%
+\contentsline {chapter}{\numberline {5}Identity Provisioning}{16}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Owner/Administrator Creation of LAK Certificate based on IAK Certificate}{16}{section.5.1}%
+\contentsline {section}{\numberline {5.2}OEM Creation of IAK Certificate based on EK Certificate}{21}{section.5.2}%
+\contentsline {chapter}{\numberline {6}Conclusion}{23}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Conclusion}{23}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Future Work}{23}{section.6.2}%
+\contentsline {chapter}{\numberline {A}Model of Inference}{25}{appendix.A}%
+\contentsline {chapter}{\numberline {B}Misc Stuff 2}{27}{appendix.B}%

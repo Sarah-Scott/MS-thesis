@@ -56,7 +56,7 @@ The \verb|CheckAttributes| command verifies that a public key has all of the pro
 
 The \verb|TPM2_Hash| command performs a cryptographic hash operation on a piece of data. This data may be any message that is known to the entity performing the command. The result of the operation is abstractly defined using the opaque \verb|hash| constructor. In fact only one command may be used to determine the contents of a hash digest, that is, the \verb|CheckHash| command which verifies that the contents of a hash digest match a particular plaintext message. The hash digest and the plaintext message must both be in state. 
 
-The \verb|TPM2_Sign| command generates a signature over a message using the specified private key. There are several conditions for successful execution. For one, the key must have the \verb|Sign| attribute set. Additionally, the key must reside in the TPM. If the key has the \verb|Restricted| attribute not set, then the message must simply be in state. On the other hand, if the key does have the \verb|Restricted| attribute set, then the message must have been produced by the TPM and be in the TPM state. As described in Section 2.1.1, a restricted signing key may sign external data if and only if the TPM first performed a hash operation on the data. In practice, the \verb|TPM2_Hash| command would produce a ticket containing a validation structure which indicates that the resulting hash was produced by the TPM and is safe to sign. This ticket is then passed to the \verb|TPM2_Sign| command. In the model, these tickets are handled implicitly: the hash digest produced by \verb|TPM2_Hash| is added to the TPM state so that the restricting sign key may then sign the external data. 
+The \verb|TPM2_Sign| command generates a signature over a message using the specified private key. There are several conditions for successful execution. For one, the key must have the \verb|Sign| attribute set. Additionally, the key must reside in the TPM. If the key has the \verb|Restricted| attribute not set, then the message must simply be in state. On the other hand, if the key does have the \verb|Restricted| attribute set, then the message must have been produced by the TPM and be in the TPM state. As described in Section 2.1.1, a restricted signing key may sign external data if and only if the TPM first performed a hash operation on the data. We call the hash operation a signature hash when used for this purpose. In practice, the \verb|TPM2_Hash| command would produce a ticket containing a validation structure which indicates that the resulting hash was produced by the TPM and is safe to sign. This ticket is then passed to the \verb|TPM2_Sign| command. In the model, these tickets are handled implicitly: the hash digest produced by \verb|TPM2_Hash| is added to the TPM state so that the restricting sign key may then sign the external data. 
 
 The \verb|TPM2_Certify| command proves than an object is loaded in the TPM by producing a signed \verb|TPM2B_Attest| structure. The command requires two inputs: a public key to be certified and a private key to sign the attestation structure. The private key must have the \verb|Sign| attribute set and must reside in the TPM. Upon recieving a request to execute the \verb|TPM2_Certify| command, the TPM will verify that the inverse of the public key parameter resides in the TPM as well. Messages produced by the \verb|TPM2_Sign| and \verb|TPM2_Certify| commands are defined using the \verb|signature| constructor. A signature may be verified against a public key using the \verb|CheckSig| command. If the provided public key is the inverse of the private key which performed the signature, then the check succeeds.
 
@@ -72,9 +72,9 @@ The \verb|MakePair| command combines two messages into a single message using th
 
 Due to the abstract, symbolic nature of this model, several TPM commands are intentionally excluded from the \verb|command| type. This results specifically from an inability to truly capture the cryptographic properties of randomness. Randomness plays a vital role in the real-life implementation of keys and nonces, that is, it prevents a key or nonce from being guessed. Since we are unable to preserve this property in our model, we choose to eliminate all commands which generate a key or nonce. Therefore, a message of either of these types must be inferred from some other message or be in the initial state. 
 
+
+
 The \verb|TPM2_GetRandom| command retrieves random bytes from the TPM. These resulting bytes may be used as a nonce. Due to the reason described above, we do not include this command explicitly in our model, although we do assume it is used by the CA in some protocols. 
-
-
 
 %The \verb|CheckRandom| command verifies that a provided random number matches a particular golden value. The golden value is a nonce which must have been produced by one's own TPM. 
 
@@ -84,6 +84,38 @@ The \verb|TPM2_ActivateCredential| command
 
 % We pick an arbitrary data type to abstract away this randomness. In this case, we choose to utilize the naturals. There are two significant data types in this model which are defined in this way: \verb|keyIdType| and \verb|randType|. The abstract \verb|keyIdType| is sufficient in providing a value by which keys may be differentiated. Similarly, the \verb|randType| may be used to differentiate nonces. The major limitation in this modeling technique is that it does not express the extremely small probability associated with correctly guessing a key or nonce.
 
-%
 
 
+Commands in the model are sequenced linearly by the \verb|sequence| type. In fact, this type is identical in structure to the Coq type \verb|list command|. Sequential command execution is defined as an inductive proposition relating an initial state, a command sequence, and a final state. 
+\begin{figure}[h]
+\begin{lstlisting}[language=Coq]
+Inductive sequence : Type :=
+| Sequence : command -> sequence -> sequence
+| Done : sequence.
+
+Infix ";;" := Sequence (at level 60, right associativity).
+
+Inductive seq_execute : tpm_state * state -> sequence -> tpm_state * state -> Prop :=
+| SE_Seq : forall ini mid fin c s,
+    execute ini c mid ->
+    seq_execute mid s fin ->
+    seq_execute ini (Sequence c s) fin
+| SE_Done : forall ini,
+    seq_execute ini Done ini.
+\end{lstlisting}
+\caption{Model of Command Sequences}
+\end{figure}
+We can prove several interesting and useful facts about the \verb|seq_execute| relation. Firstly, sequential execution is deterministic. Given an initial state and a command sequence, there is at most one final state which satisfies the \verb|seq_execute| relation. This means that \verb|seq_execute| is a partial function. Next, sequential execution is an expansion. Given a related initial state, command sequence, and final state, the initial state is  always a subset of the final state (i.e., \verb|seq_execute| expands on the initial state). In particular, commands do not remove elements from the state. Finally, sequential execution cannot generate keys or nonces. This feature is due to the deliberate exclusion of certain TPM commands from the language. The proof statements are recorded below (See Appendix B for the proofs themselves).
+\begin{figure}[h]
+\begin{lstlisting}[language=Coq]
+Theorem seq_exec_deterministic : forall ini s fin1 fin2,
+  seq_execute ini s fin1 ->
+  seq_execute ini s fin2 ->
+  fin1 = fin2.
+
+Theorem seq_exec_expansion : forall iniTPM ini s finTPM fin,
+  seq_execute (iniTPM,ini) s (finTPM,fin) ->
+  (iniTPM \subsetOf finTPM) /\ (ini \subsetOf fin).
+\end{lstlisting}
+\caption{Theorems on Sequential Execution}
+\end{figure}

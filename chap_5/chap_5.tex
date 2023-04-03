@@ -1,19 +1,149 @@
 \chapter{Identity Provisioning}
 
-To mantain a cryptographic evidentiary chain linking a DevID to a specific TPM and device, the CA must follow these provisioning protocols. 
+To mantain a cryptographic evidentiary chain linking a DevID to a specific TPM and device, the CA should follow certain provisioning protocols. The TCG describes several such protocols in their specification \textit{TPM 2.0 Keys for Device Identity and Attestation}. We will consider in detail two of these protocols: OEM creation of an IAK certificate based on an EK certificate and Owner/Administrator creation of an LAK certificate based on an IAK certificate. We choose these two protocols since they bear the most significance in enrollment of additional DevIDs (recall that AK certificates may be used as parent nodes in a chain of certificates). For each protocol, the TCG's specification not only outlines its steps but also claims it provides certain assurances.
 
-
-
-
-
-\section{OEM Creation of IAK Certificate based on EK Certificate}
-Procedure:
-\begin{enumerate}
-  \item hi
-\end{enumerate}
-
-
-
+For convenience and clarity, we will inspect each of these protocols in the reverse order that their dependencies entails.
 
 \section{Owner/Administrator Creation of LAK Certificate based on IAK Certificate}
+In this section, we will shorten the term Owner/Administrator to Owner. The Administrator may still be a participant in this protocol. We only mean for this to act as an abbreviation. Now, we begin by provided a description of the recommended procedure. 
+\begin{enumerate}[itemsep=0pt,parsep=0pt,partopsep=0pt]
+  \setcounter{enumi}{-1}
+  \item The Owner creates and loads the LAK
+  \item The Owner certifies the LAK with the IAK
+  \item The Owner builds the CSR containing:
+  \begin{enumerate}[topsep=0pt, itemsep=0pt,parsep=0pt,partopsep=0pt]
+    \item The signed \verb|TPM2B_Attest| structure
+    \item The IAK certificate
+  \end{enumerate}
+  \item The Owner takes a signature hash of the CSR
+  \item The Owner signs the resulting hash digest with the LAK
+  \item The Owner sends the CSR paired with the signed hash to the CA
+  \item The CA verifies the recieved data by checking:
+  \begin{enumerate}[topsep=0pt, itemsep=0pt,parsep=0pt,partopsep=0pt]
+    \item The hash digest against the CSR
+    \item The signature on the hash digest with the LAK public key
+    \item The signature on the \verb|TPM2B_Attest| structure with the IAK public key
+    \item The signature on the IAK certificate with the public key of the OEM's CA
+    \item The attributes of the LAK
+  \end{enumerate}
+  \item If all of the checks succeed, the CA issues the LAK certificate to the Owner
+\end{enumerate}
+The TCG's specification claims that this procedure provides the following assurances: (A) The new LAK is resident in the same TPM as the IAK and (B) The LAK has the correct key properties. Our goal is to prove that these assurances do in fact hold. Going forward, we will consider two cases: (1) the Owner and the CA are both trusted to execute their steps correctly and (2) only the CA is trusted to execute its steps correctly --- the Owner is NOT trusted. The TCG's specification does not state which of these assumptions they are reasoning under. Additionally, it does not provide a proof or even any clear justification for how the protocol provides these assurances.
+
+We model this protocol within Coq's \verb|Module Type| mechanism. This mechanisms allows for the inclusion of parameters which provides the necessary flexibility to describe the protocol generally. Each participating entity has its own parameters. The Owner has a key to be certified (i.e., the LAK), its IAK, and IAK certificate. The CA has its own key and the public key of the OEM's CA. The \verb|Module Type| mechanism additionally allows for axioms to be defined. When instantiating a Module Type with concrete values, one must prove all of the axioms. The first axiom we define is straightforward and only attempts to enforce the randomness of cryptographic keys, that is, all key parameters must be pairwise distinct.
+\begin{figure}[h]
+\begin{lstlisting}[language=Coq]
+(* Owner parameters *)
+Parameter pubLAK : pubKey.
+Parameter pubIAK : pubKey.
+Parameter certIAK : signedCert.
+
+(* CA parameters *)
+Parameter pubCA : pubKey.
+Parameter pubOEM : pubKey.
+
+(* All keys are pairwise distinct *)
+Axiom keys_distinct :
+  pubLAK <> pubIAK /\
+  pubLAK <> pubCA /\
+  pubLAK <> pubOEM /\
+  pubIAK <> pubCA /\
+  pubIAK <> pubOEM /\
+  pubCA <> pubOEM.
+\end{lstlisting}
+\caption{Parameters of LAK Certification Protocol}
+\end{figure}
+
+
+First let us assume that statement 1 holds: the Owner and the CA are both trusted to execute their steps correctly. The protocol can then be regarded as being composed of two parts: the Owner's steps (i.e., steps 0-5) followed by the CA's steps (i.e., steps 6-7). With that in mind, we can construct an object of type \verb|sequence| for each the Owner and the CA. Since the \verb|command| type does not include a method for creating and loading keys, we assume step 0 to have been performed prior to the sequence. 
+\begin{figure}[h]
+\begin{lstlisting}[language=Coq]
+Definition steps1to5_Owner : sequence :=
+TPM2_Certify 
+   pubLAK 
+   privIAK ;;
+MakeCSR_LDevID 
+  (signature (TPM2B_Attest pubLAK) privIAK) 
+   certIAK ;;
+TPM2_Hash 
+  (TCG_CSR_LDevID (signature (TPM2B_Attest pubLAK) privIAK) certIAK) ;;
+TPM2_Sign 
+  (hash (TCG_CSR_LDevID (signature (TPM2B_Attest pubLAK) privIAK) certIAK)) 
+   privLAK ;;
+MakePair 
+  (TCG_CSR_LDevID (signature (TPM2B_Attest pubLAK) privIAK) certIAK) 
+  (signature (hash (TCG_CSR_LDevID (signature (TPM2B_Attest pubLAK) privIAK) certIAK)) privLAK) ;;
+Done. 
+\end{lstlisting}
+\caption{Model of Correct Steps of Owner}
+\end{figure}
+A minimal initial state for the Owner can be constructed intuitively based on this sequence. In particiular, given a sequence, a minimal initial state is defined as the smallest possible TPM state and general state which allows for successful execution of the sequence. Note that this definition does not constrain the general state to be a superset of the TPM state; in fact, it is the case that most often it is not. We provide a candidate initial state which satisfies this minimality constraint for the Owner's steps. The intuition behind this candidate state proceeds as follows. First, the private LAK and private IAK must reside in the same TPM because the Owner certifies the LAK with the IAK. Next, the IAK certificate must be in state because the Owner includes it in the CSR. The intuition behind building the minimal initial state is useful in proving that it is in fact minimal. The proof statement is constructed by two parts. First, the minimal initial state is a lower bound on the set of possible initial states (i.e., the minimal initial state is a subset of every initial state which allows for successful execution of the steps). And second, the minimal initial state is sufficient for successful execution (i.e., the minimial initial state itself allows for successful execution of the steps).
+\begin{figure}[h]
+\begin{lstlisting}[language=Coq]
+Definition min_iniTPM_Owner : tpm_state :=
+[ privateKey privLAK ;
+  privateKey privIAK ].
+
+Definition min_ini_Owner : state :=
+[ signedCertificate certIAK ].
+
+Lemma ini_Owner_lowerBound : forall iniTPM ini fin,
+  seq_execute (iniTPM, ini) steps1to5_Owner fin ->
+  (min_iniTPM_Owner \subsetOf iniTPM) /\
+  (min_ini_Owner \subsetOf ini).
+
+Axiom ini_Owner_sufficient : exists fin,
+  seq_execute (min_iniTPM_Owner, min_ini_Owner) steps1to5_Owner fin.
+\end{lstlisting}
+\caption{Minimal Initial State of Owner}
+\end{figure}
+The lower bound property is proven to hold in general (see Appendix for proof). On the other hand, the sufficiency property must be proven for each specific instantiation of the \verb|Module Type| since it is reliant on the parameters.
+
+
+
+
+We provide a proof that this intuition led us to a correct minimum
+
+
+
+
+
+\newpage
+\section{OEM Creation of IAK Certificate based on EK Certificate}
+
+\begin{enumerate}[itemsep=0pt,parsep=0pt,partopsep=0pt]
+  \setcounter{enumi}{-1}
+  \item The OEM creates and loads the IAK
+  \item The OEM builds the CSR containing:
+  \begin{enumerate}[topsep=0pt, itemsep=0pt,parsep=0pt,partopsep=0pt]
+    \item Device identity information including the device model and serial
+    number
+    \item The EK certificate
+    \item The IAK public area
+  \end{enumerate}
+  \item The OEM takes a signature hash of the CSR
+  \item The OEM signs the resulting hash digest with the IAK
+  \item The OEM sends the CSR paired with the signed hash to the CA
+  \item The CA verifies the recieved data by checking:
+  \begin{enumerate}[topsep=0pt, itemsep=0pt,parsep=0pt,partopsep=0pt]
+    \item The hash digest against the CSR
+    \item The signature on the hash digest with the IAK public key
+    \item The signature on the EK certificate with the public key of the TPM Manufacturer's CA
+    \item The attributes of the IAK
+  \end{enumerate}
+  \item If all of the checks succeed, the CA issues a challenge blob to the OEM by:
+  \begin{enumerate}[topsep=0pt, itemsep=0pt,parsep=0pt,partopsep=0pt]
+    \item Calculating the cryptographic name of the IAK
+    \item Generating a nonce
+    \item Building the encrypted credential structure using the name of the IAK, the nonce, and the EK public key
+  \end{enumerate}
+  \item The OEM releases the secret nonce by verifying the name of the IAK and decrypting the challenge blob
+  \item The CA checks the returned nonce against the one generated in step 6b
+  \item If the check succeeds, the CA issues the IAK certificate to the OEM
+\end{enumerate}
+
+We model this protocol within Coq's \verb|Module Type| mechanism. This mechanisms allows for the inclusion of parameters which provides the necessary flexibility to describe the protocol in the general case. Each participating entity has its own parameters. The OEM has a key to be certified (i.e., the IAK), its EK certificate, and information to identify its device. The CA has its own key, the public key of the TPM Manufacturer's CA, and a nonce. The nonce parameter may be removed if we include the \verb|TPM2_GetRandom| command in the model's language. The \verb|Module Type| mechanism additionally allows for axioms to be defined. When instantiated a Module Type with concrete values, one must prove all of the axioms. The first axiom we define is straightforward and only attempts to enforce the randomness of cryptographic keys, that is, all key parameters must be pairwise distinct.
+
+
+
 
