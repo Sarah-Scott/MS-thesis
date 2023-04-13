@@ -1,4 +1,5 @@
 \chapter{Model of Inference}
+
 \begin{figure}[h]
 \begin{lstlisting}[language=Coq]
 Lemma inferFrom_iff_inferrable : forall m st,
@@ -9,7 +10,7 @@ Proof.
   -- induction m; simpl; try destruct c; try destruct s; 
      repeat constructor; assumption.
   -- intros H; induction m; subst; apply HI.
-  - induction H; simpl; subst; try destruct cert; reflexivity.
+  - induction H; simpl; subst; try destruct crt; reflexivity.
 Qed.
 \end{lstlisting}
 \end{figure}
@@ -24,8 +25,8 @@ Fixpoint inferFrom (msg : message) : state :=
       (signature m k :: inferFrom m)
   | TPM2B_Attest k => 
       [TPM2B_Attest k ; publicKey k]
-  | TCG_CSR_IDevID id' (Cert k id k_ca) k' => 
-      [TCG_CSR_IDevID id' (Cert k id k_ca) k' ; publicKey k' ; 
+  | TCG_CSR_IDevID id0 (Cert k id k_ca) k0 => 
+      [TCG_CSR_IDevID id0 (Cert k id k_ca) k0 ; publicKey k0 ; 
        signedCertificate (Cert k id k_ca) ; publicKey k]
   | TCG_CSR_LDevID m (Cert k id k_ca) => 
       (TCG_CSR_LDevID m (Cert k id k_ca) :: inferFrom m ++ 
@@ -37,9 +38,8 @@ Fixpoint inferFrom (msg : message) : state :=
   | _ => 
       [msg]
   end.
-
-  \end{lstlisting}
-  \end{figure}
+\end{lstlisting}
+\end{figure}
 
 
 
@@ -68,15 +68,15 @@ Inductive inferrable : message -> state -> Prop :=
 | I_randomNum : forall g,
     inferrable (randomNum g)
                 [randomNum g]
-| I_CSR_IDevID : forall id' cert k' st,
-    inferrable (signedCertificate cert) st ->
-    inferrable (TCG_CSR_IDevID id' cert k')
-                (TCG_CSR_IDevID id' cert k' :: publicKey k' :: st)
-| I_CSR_LDevID : forall m cert st1 st2,
+| I_CSR_IDevID : forall id crt k st,
+    inferrable (signedCertificate crt) st ->
+    inferrable (TCG_CSR_IDevID id crt k)
+                (TCG_CSR_IDevID id crt k :: publicKey k :: st)
+| I_CSR_LDevID : forall m crt st1 st2,
     inferrable m st1 ->
-    inferrable (signedCertificate cert) st2 ->
-    inferrable (TCG_CSR_LDevID m cert) 
-                (TCG_CSR_LDevID m cert :: st1 ++ st2)
+    inferrable (signedCertificate crt) st2 ->
+    inferrable (TCG_CSR_LDevID m crt) 
+                (TCG_CSR_LDevID m crt :: st1 ++ st2)
 | I_signedCertificate : forall k id k_ca,
     inferrable (signedCertificate (Cert k id k_ca)) 
                 [signedCertificate (Cert k id k_ca) ; publicKey k]

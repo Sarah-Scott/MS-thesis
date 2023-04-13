@@ -1,1 +1,24 @@
-\chapter{Misc Stuff 2}
+\chapter{Model of Execution}
+
+
+\begin{figure}[h]
+\begin{lstlisting}[language=Coq]
+Inductive execute : tpm_state * state -> command -> tpm_state * state -> Prop :=
+| E_CheckAttributes : forall stTPM st i r s d f,
+    In (publicKey (Public i r s d f)) st ->
+    execute (stTPM, st)
+             (CheckAttributes (Public i r s d f) r s d f)
+             (stTPM, st)
+| E_Hash : forall stTPM st m,
+    In m st ->
+    execute (stTPM, st)
+             (TPM2_Hash m)
+             (hash m ::stTPM, hash m ::st)
+| E_CheckHash : forall stTPM st m,
+    In (hash m) st ->
+    In m st ->
+    execute (stTPM, st)
+             (CheckHash (hash m) m)
+             (stTPM, st)
+\end{lstlisting}
+\end{figure}
