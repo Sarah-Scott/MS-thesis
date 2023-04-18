@@ -1002,6 +1002,13 @@ INPUT appendix/appendix_2.tex
 INPUT ./appendix/appendix_2.tex
 INPUT ./appendix/appendix_2.tex
 INPUT appendix/appendix_2.tex
+INPUT ./appendix/appendix_3.tex
+INPUT ./appendix/appendix_3.tex
+INPUT ./appendix/appendix_3.tex
+INPUT appendix/appendix_3.tex
+INPUT ./appendix/appendix_3.tex
+INPUT ./appendix/appendix_3.tex
+INPUT appendix/appendix_3.tex
 INPUT ku_thesis_template.aux
 INPUT ./ku_thesis_template.out
 INPUT ./ku_thesis_template.out

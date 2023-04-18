@@ -9,14 +9,15 @@
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {4.1}{\ignorespaces Model of Messages\relax }}{12}{figure.caption.9}%
 \contentsline {figure}{\numberline {4.2}{\ignorespaces Type Signature of Execute Relation\relax }}{13}{figure.caption.10}%
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Model of Commands\relax }}{13}{figure.caption.11}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Model of Commands\relax }}{14}{figure.caption.11}%
 \contentsline {figure}{\numberline {4.4}{\ignorespaces Model of Command Sequences\relax }}{16}{figure.caption.12}%
-\contentsline {figure}{\numberline {4.5}{\ignorespaces Theorems on Sequential Execution\relax }}{17}{figure.caption.13}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Properties of Sequential Execution\relax }}{18}{figure.caption.13}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {5.1}{\ignorespaces Parameters of LAK Certification Protocol\relax }}{20}{figure.caption.14}%
-\contentsline {figure}{\numberline {5.2}{\ignorespaces Model of Correct Steps of Owner\relax }}{21}{figure.caption.15}%
-\contentsline {figure}{\numberline {5.3}{\ignorespaces Model of Correct Steps of Owner's CA\relax }}{22}{figure.caption.16}%
-\contentsline {figure}{\numberline {5.4}{\ignorespaces Minimal Initial State of Owner\relax }}{23}{figure.caption.17}%
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Parameters of LAK Certification Protocol\relax }}{21}{figure.caption.14}%
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Model of LAK Certification Protocol\relax }}{22}{figure.caption.15}%
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Minimal Initial State of Owner\relax }}{24}{figure.caption.16}%
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Assumptions on the Untrusted Owner\relax }}{25}{figure.caption.17}%
+\addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2022.12.1)  13 APR 2023 09:00
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2022.12.1)  18 APR 2023 09:36
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -604,7 +604,7 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 34.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 34.
- [4]) (./chap_3/chap_3.tex [5] [6]
+ [4] [5]) (./chap_3/chap_3.tex [6]
 Chapter 3.
 LaTeX Font Info:    Trying to load font information for T1+lmss on input line 14.
 (/usr/share/texmf/tex/latex/lm/t1lmss.fd
@@ -623,7 +623,7 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [8]
-<chap_3//chap_3_figures/certificateRelationships.jpg, id=234, 637.78275pt x 351.714pt>
+<chap_3//chap_3_figures/certificateRelationships.jpg, id=239, 637.78275pt x 351.714pt>
 File: chap_3//chap_3_figures/certificateRelationships.jpg Graphic file (type jpg)
 <use chap_3//chap_3_figures/certificateRelationships.jpg>
 Package pdftex.def Info: chap_3//chap_3_figures/certificateRelationships.jpg  used on input line 74.
@@ -636,64 +636,108 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 Chapter 4.
 [12
 
-] [13] [14] [15]) (./chap_5/chap_5.tex [16] [17]
-Chapter 5.
-[18
-
 ]
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
+[13] [14] [15] [16]
 
-Overfull \hbox (39.72446pt too wide) in paragraph at lines 75--76
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+) (./chap_5/chap_5.tex [17] [18]
+Chapter 5.
+[19
+
+] [20]
+Overfull \hbox (39.72446pt too wide) in paragraph at lines 83--84
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-LaTeX Warning: `h' float specifier changed to `ht'.
+Overfull \hbox (28.75484pt too wide) in paragraph at lines 89--90
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
 
-[19]
 
-LaTeX Warning: `h' float specifier changed to `ht'.
+Overfull \hbox (9.33769pt too wide) in paragraph at lines 94--95
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
 
-[20]
 
-LaTeX Warning: `h' float specifier changed to `ht'.
+LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[21] [22] [23]) (./chap_6/chap_6.tex [24]
+[21]
+
+LaTeX Warning: Text page 22 contains only floats.
+
+[22] [23] [24] [25] [26]) (./chap_6/chap_6.tex [27]
 Chapter 6.
-) (./ku_thesis_template.bbl [25
+) [28
 
-]) (./appendix/appendix_1.tex [26
+] (./ku_thesis_template.bbl [29]) (./appendix/appendix_1.tex [30
 
 ]
 Appendix A.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-) (./appendix/appendix_2.tex [27
+) (./appendix/appendix_2.tex [31
 
-] [28]
+] [32]
 Appendix B.
-) [29
 
-] (./ku_thesis_template.aux)
+Overfull \hbox (23.39766pt too wide) in paragraph at lines 44--46
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (0.80844pt too wide) in paragraph at lines 58--59
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (58.36108pt too wide) in paragraph at lines 59--61
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+) (./appendix/appendix_3.tex [33
+
+] [34] [35]
+Appendix C.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+LaTeX Warning: Float too large for page by 55.17029pt on input line 139.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+) [36
+
+] [37] [38] (./ku_thesis_template.aux)
 Package rerunfilecheck Info: File `ku_thesis_template.out' has not changed.
-(rerunfilecheck)             Checksum: 17E9353DE56240BCD58BCE34EF7C1141;2496.
+(rerunfilecheck)             Checksum: EB33760E474D50C9E06E9C9B4834D092;2640.
  ) 
 Here is how much of TeX's memory you used:
- 16394 strings out of 480247
- 256715 string characters out of 5896151
- 605995 words of memory out of 5000000
- 33674 multiletter control sequences out of 15000+600000
+ 16698 strings out of 480247
+ 261459 string characters out of 5896151
+ 646136 words of memory out of 5000000
+ 33730 multiletter control sequences out of 15000+600000
  522751 words of font info for 112 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 72i,10n,80p,1476b,1093s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 72i,10n,80p,1582b,1093s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmss12.pfb></usr/share/texmf/fonts/type1/public/lm/lmss8.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt12.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt8.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on ku_thesis_template.pdf (36 pages, 320768 bytes).
+Output written on ku_thesis_template.pdf (45 pages, 341794 bytes).
 PDF statistics:
- 726 PDF objects out of 1000 (max. 8388607)
- 660 compressed objects within 7 object streams
- 366 named destinations out of 1000 (max. 500000)
- 134 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1058 PDF objects out of 1200 (max. 8388607)
+ 980 compressed objects within 10 object streams
+ 611 named destinations out of 1000 (max. 500000)
+ 142 words of extra memory for PDF output out of 10000 (max. 10000000)
 

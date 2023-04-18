@@ -1,11 +1,18 @@
 \chapter{Identity Provisioning}
 
-To mantain a cryptographic evidentiary chain linking a DevID to a specific TPM and device, the CA should follow certain provisioning protocols. The TCG describes several such protocols in their specification \textit{TPM 2.0 Keys for Device Identity and Attestation}. We will consider in detail two of these protocols: OEM creation of an IAK certificate based on an EK certificate and Owner/Administrator creation of an LAK certificate based on an IAK certificate. We choose these two protocols since they bear the most significance in enrollment of additional DevIDs (recall that AK certificates may be used as parent nodes in a chain of certificates). For each protocol, the TCG's specification not only outlines its steps but also claims it provides certain assurances.
+To mantain a cryptographic evidentiary chain linking a DevID to a specific TPM and device, the CA should follow certain provisioning protocols. The TCG describes several such protocols in their specification \textit{TPM 2.0 Keys for Device Identity and Attestation}. We consider in detail two of these protocols: OEM creation of an IAK certificate based on an EK certificate and Owner creation of an LAK certificate based on an IAK certificate. We select these two protocols since they bear the most significance in enrollment of additional DevIDs (recall that AK certificates may be used as parent nodes in a chain of certificates). For each protocol, the specification outlines steps for each the CA and the certificate-requesting entity to perform. Furthermore, the specification claims that each protocol provides certain assurances. The TCG themselves do not present any proofs or clear justifications to support these claims. Therefore, our goal is to abstractly model these protocols using the definitions from Section 4 and then formally verify that the corresponding assurances do in fact hold. 
 
-For convenience and clarity, we will inspect each of these protocols in the reverse order that their dependencies entails.
 
-\section{Owner/Administrator Creation of LAK Certificate based on IAK Certificate}
-In this section, we will shorten the term Owner/Administrator to Owner. The Administrator may still be a participant in this protocol. We only mean for this to act as an abbreviation. Now, we begin by provided a description of the recommended procedure. 
+We model these protocol within Coq's \verb|Module Type| mechanism. This mechanisms allows for the inclusion of parameters which provides the necessary flexibility to describe each protocol generally. Additionally, this mechanism allows for axioms to be defined. When instantiating a Module Type, one must provide concrete values for all parameters and prove that all axioms hold.
+
+In conducting these verifications, we consider two scenarios: (1) the certificate-requesting entity and the CA are both trusted to execute their steps of the protocol correctly and (2) only the CA is trusted to execute its steps correctly. The specification does not state which of these assumptions they reason under. Both of these scenarios include the presupposition that 
+previously issued certificates imply that the associated assurances hold.
+%The latter scenario clearly leads to a much stronger guarantee, but we still 
+For convenience and clarity, we inspect each of these protocols in the reverse order that their dependencies entails. We proceed with this ordering because the LAK certification protocol is approximately contained within the IAK's protocol. 
+%and we wish to first inspect the simpler protocol.
+
+\section{Owner Creation of LAK Certificate based on IAK Certificate}
+The TCG's specification claims that the following procedure guarantees that the new LAK is resident in the same TPM as the IAK.
 \begin{enumerate}[itemsep=0pt,parsep=0pt,partopsep=0pt]
   \setcounter{enumi}{-1}
   \item The Owner creates and loads the LAK
@@ -21,16 +28,15 @@ In this section, we will shorten the term Owner/Administrator to Owner. The Admi
   \item The CA verifies the recieved data by checking:
   \begin{enumerate}[topsep=0pt, itemsep=0pt,parsep=0pt,partopsep=0pt]
     \item The hash digest against the CSR
-    \item The signature on the hash digest with the LAK public key
-    \item The signature on the \verb|TPM2B_Attest| structure with the IAK public key
+    \item The signature on the hash digest with the public LAK
+    \item The signature on the \verb|TPM2B_Attest| structure with the public IAK
     \item The signature on the IAK certificate with the public key of the OEM's CA
     \item The attributes of the LAK
   \end{enumerate}
   \item If all of the checks succeed, the CA issues the LAK certificate to the Owner
 \end{enumerate}
-The TCG's specification claims that this procedure provides the following assurances: (A) the new LAK is resident in the same TPM as the IAK and (B) the LAK has the correct key properties. No proof or clear justification is presented to support this claim though. Our goal is to prove that these assurances do in fact hold. 
 
-We model this protocol within Coq's \verb|Module Type| mechanism. This mechanisms allows for the inclusion of parameters which provides the necessary flexibility to describe the protocol generally. Each participating entity has its own parameters. The Owner has a key to be certified (i.e., the LAK), its IAK, and IAK certificate. The CA has its own key and the public key of the OEM's CA. The \verb|Module Type| mechanism additionally allows for axioms to be defined. When instantiating a Module Type with concrete values, one must prove all of the axioms. The first axiom we define is straightforward and only attempts to enforce the randomness of cryptographic keys, that is, all key parameters must be pairwise distinct.
+We begin to model this protocol by defining parameters for each the Owner and CA. These parameters correspond with the elements required by the Owner and the CA to perform their respective parts of the protocol. However, elements intended to be received during the communication phases of the protocol are excluded. Specifically, these parameters intend to represent the elements which must be known by each entity prior to execution of the protocol. Therefore, the Owner has its LAK, IAK, and IAK certificate, and the CA has its own key and the public key of the OEM's CA. The parameters only explicitly include the public key values of those listed keys pairs. Private key values are computed by taking the inverse of the corresponding public key parameters; we store these values in the \verb|privLAK|, \verb|privIAK|, and \verb|privCA| variables. To enforce the randomness of cryptographic keys, we define an axiom which requires all key parameters to be pairwise distinct. 
 \begin{figure}[h]
 \begin{lstlisting}[language=Coq]
 (* Owner parameters *)
@@ -54,9 +60,11 @@ Axiom keys_distinct :
 \caption{Parameters of LAK Certification Protocol}
 \end{figure}
 
-
- The procedure may be regarded as the composition of two sequences: the Owner's steps (i.e., steps 0-5) followed by the CA's steps (i.e., steps 6-7). With that in mind, we can construct an object of type \verb|sequence| for the Owner. Since the \verb|command| type does not include a method for creating and loading keys, we assume step 0 to have been performed prior to the sequence. 
-\begin{figure}[h]
+ Similar to how the parameters are separated by ownership, the procedure itself may be separated as well. That is, the procedure may be regarded as the composition of two parts: the Owner's steps (i.e., steps 0-5) followed by the CA's steps (i.e., steps 6-7).
+ With that in mind, we can abstractly define each of these parts in our model. We use the parameters defined above to construct an object with \verb|sequence| type for the Owner and an object with function type for the CA. Constructing the Owner's steps is straightforward. Since we disallow the arbitrary creation of keys, we assume step 0 to have been performed prior; the results of step 0 are in fact already encapsulated in the \verb|pubLAK| parameter and \verb|privLAK| variable. Then each remaining step of the Owner corresponds with exactly one command in the model, namely \verb|TPM2_Certify| for step 1, \verb|MakeCSR_LDevID| for step 2, \verb|TPM2_Hash| for step 3, \verb|TPM2_Sign| for step 4, and \verb|MakePair| for step 5. 
+ %The inputs to these commands may be seen below in Figure \ref{fig:lak_model}.
+ %Since the \verb|command| type does not include a method for creating and loading keys, we assume step 0 to have been performed prior. 
+\begin{figure}[h!]
 \begin{lstlisting}[language=Coq]
 Definition steps1to5_Owner : sequence :=
 TPM2_Certify 
@@ -74,45 +82,48 @@ MakePair
   (TCG_CSR_LDevID (signature (TPM2B_Attest pubLAK) privIAK) certIAK) 
   (signature (hash (TCG_CSR_LDevID (signature (TPM2B_Attest pubLAK) privIAK) certIAK)) privLAK) ;;
 Done. 
-\end{lstlisting}
-\caption{Model of Correct Steps of Owner}
-\end{figure}
-The CA's steps are more complicated and are constructed as a function type. First the CA waits to recieve a certification request from the Owner (see the message paramter \verb|msg|). The request must be in a specific format to be considered valid (see the match statement on \verb|msg|). The CA then executes step 6 of the procedure (see the sequence within \verb|seq_execute|). If execution succeeds, the CA will issue the LAK certificate to the Owner (see the \verb|Prop| return type). We include several additional parameters and criteria to serve as a method for referencing certain elements of the certification request within proof statements.
-\begin{figure}[h]
-\begin{lstlisting}[language=Coq]
+
+
 Definition steps_CA (msg : message) (iak lak : pubKey) (cert : signedCert) : Prop :=
   match msg with
-  | (pair (TCG_CSR_LDevID (signature (TPM2B_Attest k) k0') 
-                          (Cert k0 id k_ca'))
-          (signature m k')) =>
-        iak = k0 /\
-        lak = k /\
-        cert = (Cert k0 id k_ca') /\
-        seq_execute (iniTPM_CA, inferFrom m ++ ini_CA)
-                          (CheckHash m
-                                    (TCG_CSR_LDevID (signature (TPM2B_Attest k) k0') 
-                                                    (Cert k0 id k_ca')) ;;
-                          CheckSig (signature m k') k ;;
-                          CheckSig (signature (TPM2B_Attest k) k0') k0 ;;
-                          CheckCert (Cert k0 id k_ca') pubOEM ;;
-                          CheckAttributes k Restricting Signing NonDecrypting ;;
-                          Done)
-                          (iniTPM_CA, 
-                          inferFrom m ++ ini_CA)
+  | (pair (TCG_CSR_LDevID (signature (TPM2B_Attest k) k0') (Cert k0 id k_ca')) (signature m k')) =>
+        iak = k0 /\ lak = k /\ cert = (Cert k0 id k_ca') /\
+        seq_execute   (iniTPM_CA, inferFrom m ++ ini_CA)
+                      (CheckHash 
+                          m
+                         (TCG_CSR_LDevID (signature (TPM2B_Attest k) k0') (Cert k0 id k_ca')) ;;
+                       CheckSig
+                         (signature m k') 
+                          k ;;
+                       CheckSig 
+                         (signature (TPM2B_Attest k) k0') 
+                          k0 ;;
+                       CheckCert 
+                         (Cert k0 id k_ca') 
+                          pubOEM ;;
+                       CheckAttributes 
+                          k 
+                          Restricting Signing NonDecrypting ;;
+                       Done)
+                      (iniTPM_CA, inferFrom m ++ ini_CA)
   | _ => False
   end.
 \end{lstlisting}
-\caption{Model of Correct Steps of Owner's CA}
+\caption{Model of LAK Certification Protocol}
+\label{fig:lak_model}
 \end{figure}
 
-
-Going forward, we will consider two cases: (1) the Owner and the CA are both trusted to execute their steps correctly and (2) only the CA is trusted to execute its steps correctly. The TCG's specification does not state which of these assumptions they reason under. 
-
-Let us first consider case 1: the Owner and the CA are both trusted to execute their steps correctly. We will begin by examining the Owner's steps and its requirements. We can quantitatively describe these requirements by a minimal initial state pair. Given a sequence, a minimal initial state pair is defined as the smallest TPM state and general state which allows for successful execution of the sequence. Note that this definition does not constrain the general state to be a superset of the TPM state; in fact, it is the case that for most sequences it is not. We intuitively construct a minimal initial state pair for \verb|steps1to5_Owner|. First, the private LAK and private IAK must reside in the same TPM because the Owner certifies the LAK with the IAK. Next, the IAK certificate must be in state because the Owner includes it in the CSR. This intuition is useful in proving that this resulting state pair is in fact minimal. The proof statement is constructed by two parts. First, the minimal initial state is a lower bound on the set of possible initial states. And second, the minimal initial state is sufficient for successful execution.
+Constructing the CA's steps is more complex as it relies on external input (i.e., the certification request produced by the Owner's steps). Although this complexity leads to a convoluted function definition, there is still a straightforward correspondence between the function definition and the real-life protocol. First, the CA waits to receive a certification request from the Owner (see the \verb|msg| input). The request must be in a specific format to be considered valid (see the match statement on \verb|msg|). The CA then executes step 6 of the procedure (see the sequence within \verb|seq_execute|). If execution succeeds, the CA issues the LAK certificate to the Owner (see the \verb|Prop| return type). We include several additional parameters and criteria to serve as a method for referencing certain elements of the certification request within proof statements.
 
 
 
-%A minimal initial state for the Owner can be constructed intuitively based on this sequence. In particular, given a sequence, a minimal initial state is defined as the smallest possible TPM state and general state which allows for successful execution of the sequence. Note that this definition does not constrain the general state to be a superset of the TPM state; in fact, it is the case that most often it is not. We provide a candidate initial state which satisfies this minimality constraint for the Owner's steps. The intuition behind choosing this candidate proceeds as follows. First, the private LAK and private IAK must reside in the same TPM because the Owner certifies the LAK with the IAK. Next, the IAK certificate must be in state because the Owner includes it in the CSR. The intuition behind building the minimal initial state is useful in proving that it is in fact minimal. The proof statement is constructed by two parts. First, the minimal initial state is a lower bound on the set of possible initial states. And second, the minimal initial state is sufficient for successful execution.
+These definitions provide the framework necessary for abstractly modeling the conditions of each scenario. 
+Thus let us now attempt formal verification of our goal under the conditions of scenario 1: the Owner and the CA are both trusted to execute their steps correctly. Recall first that our goal is to show that this certification procedure guarantees that the new LAK is resident in the same TPM as the IAK. Also recall that we trust that the IAK certification procedure guarantees its associated assurances, primarily that the IAK has good attributes. 
+
+We begin by examining the Owner's steps and its requirements. We can quantitatively describe these requirements by a minimal initial state pair. Given a sequence, a minimal initial state pair is defined as the smallest \verb|tpm_state| and \verb|state| which allows for successful execution of the sequence. The proof statement describing this property is constructed by two parts. First, the minimal initial state is a lower bound on the set of possible initial states. And second, the minimal initial state is sufficient for successful execution. We build a minimal initial state pair for \verb|steps1to5_Owner| using the following intuition. First, the private LAK and private IAK must reside in the same TPM because the Owner certifies the LAK with the IAK. Next, the IAK certificate must be known to the Owner since it is included in the CSR.  
+%Thus let us now attempt to formally verify that the claimed assurance is provided by the protocol under the conditions of scenario 1: the Owner and the CA are both trusted to execute their steps correctly. Recall that, in addition to these conditions, we presuppose that the assurances provided by certification of the IAK hold. In particular, we will need the assurance that the IAK has good attributes. 
+The lower bound property is proven to hold in general over this state pair. We use the intuition behind building this minimal initial state pair to guide this proof. On the other hand, the proof of the sufficiency property requires several preconditions: (1) the IAK has good attributes and (2) the Owner's CA decides to issue a certificate for the LAK. 
+The first precondition is safe to assume since we trust the OEM's CA to have checked the attributes on the IAK when issuing its respective certificate. And the second precondition is clearly safe to assume as it is a direct consequence of scenario 1. See Appendix D for the completed proofs of lemmas \verb|ini_Owner_lowerBound| and \verb|ini_Owner_sufficient|.
 \begin{figure}[h]
 \begin{lstlisting}[language=Coq]
 Definition iniTPM_Owner : tpm_state :=
@@ -134,9 +145,32 @@ Lemma ini_Owner_sufficient : forall m,
 \end{lstlisting}
 \caption{Minimal Initial State of Owner}
 \end{figure}
-The lower bound property is proven to hold in general. On the other hand, the sufficiency property requires that the IAK and LAK have "good" attributes. Specifically both keys must have the \verb|Sign| attribute set in order to execute the \verb|TPM2_Certify| and \verb|TPM2_Sign| commands respectively. We choose to make the broader assumption that the IAK and LAK have all of the attributes associated with a good attestation key. See Appendix x for the proofs of these two statements.
+%; this particicular statement is one of the assurances provided by the IAK certification protocol. 
+% the IAK certification protocol to have been performed prior and hence to have provided its associated assurances, namely that the IAK has good attributes.
+ This analysis of the Owner's steps' requirements in the form of a minimal initial state conveniently leads to the conclusion that the new LAK and the IAK must be resident in the same TPM, namely the TPM on the Owner's device. This conclusion is manifested in the \verb|iniTPM_Owner| variable which contains both the private LAK and private IAK. In conclusion, we have now confirmed that the claimed assurance is in fact guaranteed when we assume that both the Owner and the CA are trusted to execute their steps correctly. 
+%That is because the CA verifies the attributes on the LAK (see Appendix X for statement and proof). Since we have now shown assurance A holds under case 1 and assurance B holds under both cases 1 and 2, let us now attempt to prove the final objective that assurance A holds under case 2. 
 
+Now let us attempt formal verification of this same goal under the conditions of scenario 2: only the CA is trusted to execute its steps correctly. This proof is troublesome and likely impossible if we make no assumptions regarding the Owner, but since the certification request and its contents must have been produced by some entity, we consider the Owner to be this entity.
+To this end, we describe the Owner and its characteristics as a series of assumptions: the Owner executes some unknown sequence of commands \verb|s|, this sequence produces some message \verb|m| in the Owner's final \verb|state|, the Owner's initial \verb|tpm_state| may only contain private keys, and the Owner's initial \verb|state| may only contain public keys and certificates. 
+\begin{figure}[h]
+\begin{lstlisting}[language=Coq]
+forall s iniTPM ini finTPM fin m iak lak cert,
+seq_execute (iniTPM, ini) s (finTPM, fin) -> 
+In m fin ->
+(forall m', needsGeneratedTPM m' -> ~ In m' iniTPM) ->
+(forall m', needsGenerated m' -> ~ In m' ini) ->
+\end{lstlisting}
+\caption{Assumptions on the Untrusted Owner}
+\label{fig:owner_assumptions}
+\end{figure}
+We argue that these assumptions are reasonable and do not corrupt the conditions regarding the trustworthiness of the Owner. In particular, these assumptions aim only to constrain the production of the CSR and its contents to the Owner. 
+The restrictions on the Owner's initial state pair are the main contributors to enforcement of this contstraint. The \verb|needsGeneratedTPM| function restricts the Owner's initial \verb|tpm_state| to the inclusion of previously created private keys. While the \verb|needsGenerated| function restricts the the Owner's initial \verb|state| to the inclusion of public keys as well as previously issued certificates --- the subject of these certificates may be the Owner itself or any other entity.
+Although realistically the Owner has many other messages in its knowledge, these restrictions simply aim to disallow them from being used to build the CSR.
 
+Our next step is to use this series of initial assumptions to glean further information on the Owner. We cannot directly obtain the conclusion that the new LAK is resident on the same TPM as the IAK, but we are able to make an important conclusion regarding the sequence which the Owner executes. That is, the sequence \verb|s| is a super sequence of the correct steps of the Owner (i.e., \verb|steps1to5_Owner|). A list is a super sequence of another list if all the elements of the second list occur, in order, in the first --- the elements do not need to occur consecutively. We define a cascading collection of recursive functions to determine whether a given sequence of commands is a super sequence of \verb|steps1to5_Owner| (See Appendix D for definitions). Specifically, we prove that if we make all of the initial assumptions regarding the Owner and the CA (i.e., those in Figure \ref{fig:owner_assumptions} plus \verb|steps_CA m iak lak cert|) then the Owner's unknown sequence \verb|s| is actually a super sequence of \verb|steps1to5_Owner|. 
+
+Our overall proof hinges on this conclusion. In fact, the proof proceeds fairly naturally from this point on. Recall our musings in scenario 1 which reason that the LAK and IAK must reside in the same TPM if one certifies the LAK with the IAK. Therefore, our next step is to demonstrate that the Owner must in fact have executed \verb|TPM2_Certify| on the public LAK and private IAK. Since we require all of the commands inputs to match exactly, we use the recursive funtion \verb|command_in_sequence| to accurately describe this situation. Then we need only assume the conclusion obtained above to complete this helpful lemma. And finally we prove one last set of lemmas which states that the private IAK and private LAK must reside in the same TPM if one executes a sequence which contains that particular command.
+Now it is apparent that the composition of all of these small proofs leads to our end goal.
 
 
 
@@ -175,7 +209,7 @@ The lower bound property is proven to hold in general. On the other hand, the su
   \item If the check succeeds, the CA issues the IAK certificate to the OEM
 \end{enumerate}
 
-We model this protocol within Coq's \verb|Module Type| mechanism. This mechanisms allows for the inclusion of parameters which provides the necessary flexibility to describe the protocol in the general case. Each participating entity has its own parameters. The OEM has a key to be certified (i.e., the IAK), its EK certificate, and information to identify its device. The CA has its own key, the public key of the TPM Manufacturer's CA, and a nonce. The nonce parameter may be removed if we include the \verb|TPM2_GetRandom| command in the model's language. The \verb|Module Type| mechanism additionally allows for axioms to be defined. When instantiated a Module Type with concrete values, one must prove all of the axioms. The first axiom we define is straightforward and only attempts to enforce the randomness of cryptographic keys, that is, all key parameters must be pairwise distinct.
+%We model this protocol within Coq's \verb|Module Type| mechanism. This mechanisms allows for the inclusion of parameters which provides the necessary flexibility to describe the protocol in the general case. Each participating entity has its own parameters. The OEM has a key to be certified (i.e., the IAK), its EK certificate, and information to identify its device. The CA has its own key, the public key of the TPM Manufacturer's CA, and a nonce. The nonce parameter may be removed if we include the \verb|TPM2_GetRandom| command in the model's language. The \verb|Module Type| mechanism additionally allows for axioms to be defined. When instantiated a Module Type with concrete values, one must prove all of the axioms. The first axiom we define is straightforward and only attempts to enforce the randomness of cryptographic keys, that is, all key parameters must be pairwise distinct.
 
 
 
