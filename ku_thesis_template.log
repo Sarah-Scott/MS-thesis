@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2022.12.1)  18 APR 2023 09:36
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2022.12.1)  19 APR 2023 22:06
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -587,23 +587,23 @@ Chapter 1.
 ]
 Chapter 2.
 
-Overfull \hbox (1.43027pt too wide) in paragraph at lines 6--8
+Overfull \hbox (1.43027pt too wide) in paragraph at lines 7--9
 \T1/ptm/m/n/12 A Trusted Plat-form Mod-ule (TPM) is a mi-cro-con-troller that com-plies with the ISO/IEC 11889:2015
  []
 
 [2
 
 ]
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 25.
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 26.
  (/usr/share/texmf/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 ) [3]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 34.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 35.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 34.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 35.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 34.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 35.
  [4] [5]) (./chap_3/chap_3.tex [6]
 Chapter 3.
 LaTeX Font Info:    Trying to load font information for T1+lmss on input line 14.
@@ -623,7 +623,7 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [8]
-<chap_3//chap_3_figures/certificateRelationships.jpg, id=239, 637.78275pt x 351.714pt>
+<chap_3//chap_3_figures/certificateRelationships.jpg, id=233, 637.78275pt x 351.714pt>
 File: chap_3//chap_3_figures/certificateRelationships.jpg Graphic file (type jpg)
 <use chap_3//chap_3_figures/certificateRelationships.jpg>
 Package pdftex.def Info: chap_3//chap_3_figures/certificateRelationships.jpg  used on input line 74.
@@ -640,26 +640,26 @@ Chapter 4.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[13] [14] [15] [16]
+[13] [14] [15]
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-) (./chap_5/chap_5.tex [17] [18]
+[16]) (./chap_5/chap_5.tex [17] [18]
 Chapter 5.
 [19
 
 ] [20]
-Overfull \hbox (39.72446pt too wide) in paragraph at lines 83--84
+Overfull \hbox (39.72446pt too wide) in paragraph at lines 90--91
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (28.75484pt too wide) in paragraph at lines 89--90
+Overfull \hbox (28.75484pt too wide) in paragraph at lines 96--97
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (9.33769pt too wide) in paragraph at lines 94--95
+Overfull \hbox (9.33769pt too wide) in paragraph at lines 101--102
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
@@ -723,21 +723,21 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 
 ] [37] [38] (./ku_thesis_template.aux)
 Package rerunfilecheck Info: File `ku_thesis_template.out' has not changed.
-(rerunfilecheck)             Checksum: EB33760E474D50C9E06E9C9B4834D092;2640.
+(rerunfilecheck)             Checksum: 2305E978D3C8423466282EC7E1C242E0;2704.
  ) 
 Here is how much of TeX's memory you used:
- 16698 strings out of 480247
- 261459 string characters out of 5896151
- 646136 words of memory out of 5000000
+ 16692 strings out of 480247
+ 261235 string characters out of 5896151
+ 646143 words of memory out of 5000000
  33730 multiletter control sequences out of 15000+600000
- 522751 words of font info for 112 fonts, out of 8000000 for 9000
+ 524831 words of font info for 119 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 72i,10n,80p,1582b,1093s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmss12.pfb></usr/share/texmf/fonts/type1/public/lm/lmss8.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt12.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt8.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on ku_thesis_template.pdf (45 pages, 341794 bytes).
+ 72i,10n,80p,1582b,1094s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmss12.pfb></usr/share/texmf/fonts/type1/public/lm/lmss8.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt12.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt8.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on ku_thesis_template.pdf (45 pages, 358866 bytes).
 PDF statistics:
- 1058 PDF objects out of 1200 (max. 8388607)
- 980 compressed objects within 10 object streams
- 611 named destinations out of 1000 (max. 500000)
+ 1040 PDF objects out of 1200 (max. 8388607)
+ 959 compressed objects within 10 object streams
+ 598 named destinations out of 1000 (max. 500000)
  142 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -3,20 +3,21 @@
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {2.1}{\ignorespaces Model of Keys\relax }}{4}{figure.caption.4}%
 \contentsline {figure}{\numberline {2.2}{\ignorespaces Model of Certificates\relax }}{5}{figure.caption.5}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Equality in Coq\relax }}{6}{figure.caption.6}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Model of Key Attribute Requirements\relax }}{9}{figure.caption.7}%
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Key and Certificate Relationships [\cite {DevIDSpec-TCG}]\relax }}{10}{figure.caption.8}%
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Model of Key Attribute Requirements\relax }}{9}{figure.caption.8}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Key and Certificate Relationships \cite {DevIDSpec-TCG}\relax }}{10}{figure.caption.9}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Model of Messages\relax }}{12}{figure.caption.9}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Type Signature of Execute Relation\relax }}{13}{figure.caption.10}%
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Model of Commands\relax }}{14}{figure.caption.11}%
-\contentsline {figure}{\numberline {4.4}{\ignorespaces Model of Command Sequences\relax }}{16}{figure.caption.12}%
-\contentsline {figure}{\numberline {4.5}{\ignorespaces Properties of Sequential Execution\relax }}{18}{figure.caption.13}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Model of Messages\relax }}{12}{figure.caption.10}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Type Signature of Execute Relation\relax }}{13}{figure.caption.11}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Model of Commands\relax }}{14}{figure.caption.12}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Model of Command Sequences\relax }}{17}{figure.caption.13}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Properties of Sequential Execution\relax }}{17}{figure.caption.14}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {5.1}{\ignorespaces Parameters of LAK Certification Protocol\relax }}{21}{figure.caption.14}%
-\contentsline {figure}{\numberline {5.2}{\ignorespaces Model of LAK Certification Protocol\relax }}{22}{figure.caption.15}%
-\contentsline {figure}{\numberline {5.3}{\ignorespaces Minimal Initial State of Owner\relax }}{24}{figure.caption.16}%
-\contentsline {figure}{\numberline {5.4}{\ignorespaces Assumptions on the Untrusted Owner\relax }}{25}{figure.caption.17}%
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Parameters of LAK Certification Protocol\relax }}{21}{figure.caption.15}%
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Model of LAK Certification Protocol\relax }}{22}{figure.caption.16}%
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Minimal Initial State of Owner\relax }}{24}{figure.caption.17}%
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Assumptions on the Untrusted Owner\relax }}{25}{figure.caption.18}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

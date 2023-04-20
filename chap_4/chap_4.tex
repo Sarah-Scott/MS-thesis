@@ -1,5 +1,12 @@
 
-\chapter{Execution Model}
+\chapter{Command Execution Model}
+
+% execute is a labeled transition system
+% make/activate credential
+% cannot generate nonces or credentials
+% command_in_sequence
+
+
 
 The protocols used to enroll DevID certificates require both TPM and non-TPM commands to be performed by the CA and the requesting device. A command may rely on a variety of parameters such as keys, nonces, certificates, as well as other messages. A message includes all of the structures that an entity may use or produce. The \verb|message| type is 
 \begin{figure}[h]
@@ -23,7 +30,7 @@ an abstract representation of these structures. From a message, additional messa
 
 
 
-Each command and its execution is modeled abstractly. We do not attempt to model the computational intricacies of true cryptography. Command execution is defined as an inductive proposition relating an initial state pair, a command, and a final state pair (see Appendix B for definition). 
+Each command and its execution is modeled abstractly. I do not attempt to model the computational intricacies of true cryptography. Command execution is defined as an inductive proposition relating an initial state pair, a command, and a final state pair. This resulting model is in fact a labeled transition system. A labeled transition system is defined as a triple $(S,L,T)$ where $S$ is a set of states, $L$ is a set of labels, and $T \subseteq S \times L \times S$ is a labeled transition relation. In this case, $S$ is the set of \verb|tpm_state * state| pairs; $L$ is the set of elements in the \verb|command| type; and $T$ is the \verb|execute| relation.
 \begin{figure}[h]
 \begin{lstlisting}[language=Coq]
 Inductive execute : tpm_state * state -> command -> tpm_state * state -> Prop
@@ -33,7 +40,7 @@ Inductive execute : tpm_state * state -> command -> tpm_state * state -> Prop
 The \verb|tpm_state| and \verb|state| types are aliases for a list of messages. These types are implemented as a list only for convenience; they are treated as a set in all practical aspects (i.e., ordering and duplicates are ignored). The \verb|tpm_state| type is intended to contain messages that a restricted signing key may operate on. Recall from Section 2.1.1 that these messages may be in one of two forms: (1) objects constructed from TPM-internal data or (2) digests produced by signature hash operations. Messages in form 1 include private keys and PCRs (although the latter are not yet included in this model). 
 %These include objects that reside within the TPM (i.e., those that begin with the \verb|TPM_Generated| value) such as private keys and PCRs (although the latter are not yet included in this model). And, furthermore, these include hash digests produced by a signature hash operation.
 
-Due to the abstract, symbolic nature of this model, several TPM commands are intentionally excluded from the \verb|command| type. This results specifically from an inability to truly capture the cryptographic properties of randomness. Randomness plays a vital role in the real-life implementation of keys and nonces, that is, it prevents a key or nonce from being guessed. Since we are unable to preserve this property in our model, we choose to eliminate all commands which generate a key or nonce. Therefore, a message of either of these types must be inferred from some other message or be in the initial state. 
+Due to the abstract, symbolic nature of this model, several TPM commands are intentionally excluded from the \verb|command| type. This results specifically from an inability to truly capture the cryptographic properties of randomness. Randomness plays a vital role in the real-life implementation of keys and nonces, that is, it prevents a key or nonce from being guessed. Since I am unable to preserve this property in the model, I choose to eliminate all commands which generate a key or nonce. Therefore, a message of either of these types must be inferred from some other message or be in the initial state. 
 \begin{figure}[h]
 \begin{lstlisting}[language=Coq]
 Inductive command : Type :=
@@ -73,7 +80,7 @@ The \verb|TPM2_ActivateCredential| command
 
 
 The \verb|MakeCSR_IDevID| command produces a \verb|TCG_CSR_IDevID| structure containing the provided inputs. 
- A \verb|TCG_CSR_IDevID| is a certificate signing request (CSR) which contains the data required to couple an IAK to a TPM-containing device. Additionally, it may include the certification information for an IDevID if one wishes to produce both the IAK and IDevID certificates in a single pass. In particular, this structure is used any time an enrollment process uses the EK certificate. The Trusted Computing Group (TCG) defines a C typedef structure to group all of the fields. In the model, we only include the fields necessary for creating an IAK certificate (i.e., device-identifying information, an EK certificate, and a public key to be certified). The \verb|MakeCSR_LDevID| command is very similar to the \verb|MakeCSR_IDevID| command except it produces a \verb|TCG_CSR_LDevID| structure which includes the certification information for an LAK or LDevID. In the model, we only include the fields necessary for creating an LAK certificate (i.e., a signed \verb|TPM2B_Attest| structure and an IAK certificate).
+ A \verb|TCG_CSR_IDevID| is a certificate signing request (CSR) which contains the data required to couple an IAK to a TPM-containing device. Additionally, it may include the certification information for an IDevID if one wishes to produce both the IAK and IDevID certificates in a single pass. In particular, this structure is used any time an enrollment process uses the EK certificate. The Trusted Computing Group (TCG) defines a C typedef structure to group all of the fields. In the model, I only include the fields necessary for creating an IAK certificate (i.e., device-identifying information, an EK certificate, and a public key to be certified). The \verb|MakeCSR_LDevID| command is very similar to the \verb|MakeCSR_IDevID| command except it produces a \verb|TCG_CSR_LDevID| structure which includes the certification information for an LAK or LDevID. In the model, I only include the fields necessary for creating an LAK certificate (i.e., a signed \verb|TPM2B_Attest| structure and an IAK certificate).
 
 The \verb|CheckCert| command verifies a signature over a certificate against a public key. One should check an EK certificate against the public key of the TPM Manufacturer's CA, an IAK or IDevID certificate against the public key of the OEM's CA, and an LAK or LDevID certificate against the public key of the Owner's CA.
 
@@ -119,7 +126,7 @@ Inductive seq_execute : tpm_state * state -> sequence -> tpm_state * state -> Pr
 \end{figure}
 Sequential execution is done by first executing the command at the head of the list using the single command execution relation \verb|execute| followed by executing the sequence at the tail of the list using the sequential execution relation \verb|seq_execute|. The final state pair produced by executing the single command is used as the initial state pair for the subsequent sequence. This recursive structure allows for the convenient use of induction in many proofs.
 %The \verb|seq_execute| relation executes the command at the head of the list using the \verb|execute| relation then recursively uses the \verb|seq_execute| relation to execute the tail of the list using the resulting final state pair as the initial state.
-In fact, we prove several interesting and useful facts about the \verb|seq_execute| relation. Firstly, sequential execution is deterministic. Given an initial state pair and a command sequence, there is at most one final state pair which satisfies the \verb|seq_execute| relation. This means that \verb|seq_execute| is a partial function. Next, sequential execution is an expansion. Given a related initial state pair, command sequence, and final state pair, the initial state is always a subset of the final state (i.e., \verb|seq_execute| expands on the initial state). In particular, commands do not remove elements from the state. Finally, sequential execution cannot generate keys or nonces. This feature is due to the deliberate exclusion of certain TPM commands from the language. Furthermore, sequential execution cannot generate encrypted credential blobs without a nonce in the initial state. The proof statements are recorded below (See Appendix C for the proofs themselves). We use the contrapositive statements for the theorems regarding nonce and credential generation for convenient use in later proofs. 
+In fact, I prove several interesting and useful facts about the \verb|seq_execute| relation. Firstly, sequential execution is deterministic. Given an initial state pair and a command sequence, there is at most one final state pair which satisfies the \verb|seq_execute| relation. This means that \verb|seq_execute| is a partial function. Next, sequential execution is an expansion. Given a related initial state pair, command sequence, and final state pair, the initial state is always a subset of the final state (i.e., \verb|seq_execute| expands on the initial state). In particular, commands do not remove elements from the state. Finally, sequential execution cannot generate keys or nonces. This feature is due to the deliberate exclusion of certain TPM commands from the language. Furthermore, sequential execution cannot generate encrypted credential blobs without a nonce in the initial state. The proof statements are recorded below (See Appendix C for the proofs themselves). I use the contrapositive statements for the theorems regarding nonce and credential generation for convenient use in later proofs. 
 \begin{figure}[h]
 \begin{lstlisting}[language=Coq]
 Theorem seq_exec_deterministic : forall ini s fin1 fin2,
@@ -130,25 +137,8 @@ Theorem seq_exec_deterministic : forall ini s fin1 fin2,
 Theorem seq_exec_expansion : forall iniTPM ini s finTPM fin,
   seq_execute (iniTPM,ini) s (finTPM,fin) ->
   (iniTPM \subsetOf finTPM) /\ (ini \subsetOf fin).
-
-Theorem seq_exec_cannotGenerateKey : forall s iniTPM ini finTPM fin k,
-  seq_execute (iniTPM, ini) s (finTPM, fin) ->
-  In (privateKey k) finTPM ->
-  In (privateKey k) iniTPM.
-
-Theorem seq_exec_cannotGenerateRand_contrapositive : forall s iniTPM ini finTPM fin g,
-  seq_execute (iniTPM, ini) s (finTPM, fin) ->
-  ~ In (randomNum g) ini ->
-  (forall n k, ~ In (encryptedCredential n g k) ini) ->
-  ~ In (randomNum g) fin.
-
-Theorem seq_exec_cannotGenerateCred_contrapositive : forall s iniTPM ini finTPM fin n g k,
-  seq_execute (iniTPM, ini) s (finTPM, fin) ->
-  (forall n k, ~ In (encryptedCredential n g k) ini) ->
-  ~ In (randomNum g) ini ->
-  ~ In (encryptedCredential n g k) fin.
 \end{lstlisting}
 \caption{Properties of Sequential Execution}
 \end{figure}
 
-We define a recursive function which determines whether a provided command is an element of a provided sequence. Not only is the command itself required to match but all of its inputs must as well.
+I define a recursive function which determines whether a provided command is an element of a provided sequence. Not only is the command itself required to match but all of its inputs must as well.
