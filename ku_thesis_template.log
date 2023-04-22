@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2022.12.1)  21 APR 2023 19:42
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2022.12.1)  22 APR 2023 16:13
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -619,7 +619,7 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 [9
 
 ] [10] [11]
-<chap_3//chap_3_figures/certificateRelationships.jpg, id=295, 637.78275pt x 351.714pt>
+<chap_3//chap_3_figures/certificateRelationships.jpg, id=301, 637.78275pt x 351.714pt>
 File: chap_3//chap_3_figures/certificateRelationships.jpg Graphic file (type jpg)
 <use chap_3//chap_3_figures/certificateRelationships.jpg>
 Package pdftex.def Info: chap_3//chap_3_figures/certificateRelationships.jpg  used on input line 84.
@@ -636,50 +636,65 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[18]
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-) (./chap_5/chap_5.tex [19] [20]
+[18]) (./chap_5/chap_5.tex [19] [20]
 Chapter 5.
 [21
 
 ] [22]
-Overfull \hbox (39.72446pt too wide) in paragraph at lines 91--92
+Overfull \hbox (39.72446pt too wide) in paragraph at lines 94--95
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (28.75484pt too wide) in paragraph at lines 97--98
+Overfull \hbox (28.75484pt too wide) in paragraph at lines 100--101
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (9.33769pt too wide) in paragraph at lines 102--103
+Overfull \hbox (9.33769pt too wide) in paragraph at lines 105--106
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+[23]
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+Overfull \hbox (6.2103pt too wide) in paragraph at lines 131--134
+[][]\T1/lmtt/m/n/12 CheckAttributes k Restricting Signing NonDecrypting Fixing []\T1/ptm/m/n/12 in the CA's func-tion cor-
+ []
+
+[24]
+
+LaTeX Warning: Text page 25 contains only floats.
+
+[25] [26] [27] [28] [29]
+Overfull \hbox (44.30112pt too wide) in paragraph at lines 256--257
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (6.61134pt too wide) in paragraph at lines 281--282
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[23]
-
-LaTeX Warning: Text page 24 contains only floats.
-
-[24] [25] [26] [27] [28] [29]) (./chap_6/chap_6.tex [30]
+[30] [31]) (./chap_6/chap_6.tex [32]
 Chapter 6.
-) [31
+) [33
 
-] (./ku_thesis_template.bbl [32] [33
+] (./ku_thesis_template.bbl [34] [35
 
-]) (./appendix/appendix_1.tex [34]
+]) (./appendix/appendix_1.tex [36]
 Appendix A.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-) (./appendix/appendix_2.tex [35
+) (./appendix/appendix_2.tex [37
 
-] [36]
+] [38]
 Appendix B.
 
 Overfull \hbox (23.39766pt too wide) in paragraph at lines 44--46
@@ -702,9 +717,9 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-) (./appendix/appendix_3.tex [37
+) (./appendix/appendix_3.tex [39
 
-] [38] [39]
+] [40] [41]
 Appendix C.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
@@ -715,25 +730,25 @@ LaTeX Warning: Float too large for page by 55.17029pt on input line 139.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-) [40
+) [42
 
-] [41] [42] (./ku_thesis_template.aux)
+] [43] [44] (./ku_thesis_template.aux)
 Package rerunfilecheck Info: File `ku_thesis_template.out' has not changed.
 (rerunfilecheck)             Checksum: F5284A155D2989926A697CF05031B022;2827.
  ) 
 Here is how much of TeX's memory you used:
- 16744 strings out of 480247
- 262080 string characters out of 5896151
- 646378 words of memory out of 5000000
- 33763 multiletter control sequences out of 15000+600000
+ 16822 strings out of 480247
+ 263232 string characters out of 5896151
+ 646515 words of memory out of 5000000
+ 33775 multiletter control sequences out of 15000+600000
  524831 words of font info for 119 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  72i,10n,80p,1582b,1094s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmss12.pfb></usr/share/texmf/fonts/type1/public/lm/lmss8.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt12.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt8.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on ku_thesis_template.pdf (49 pages, 365820 bytes).
+Output written on ku_thesis_template.pdf (51 pages, 374941 bytes).
 PDF statistics:
- 1092 PDF objects out of 1200 (max. 8388607)
- 1006 compressed objects within 11 object streams
- 617 named destinations out of 1000 (max. 500000)
+ 1182 PDF objects out of 1200 (max. 8388607)
+ 1094 compressed objects within 11 object streams
+ 683 named destinations out of 1000 (max. 500000)
  150 words of extra memory for PDF output out of 10000 (max. 10000000)
 
