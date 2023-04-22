@@ -1,18 +1,34 @@
 \chapter{Introduction}
 
-% outline paper
-% include related works (Bridget Holling and Ryan)
-% provide goal statement with explicit protocol names
+% maybe expand intro
+
+% ****related works section*******
+
+Development and deployment of trusted systems often require definitive identification of devices. A remote entity should have confidence that a device is as it claims to be. An ideal method for fulfulling this need is through the utilization of TPM keys as secure device identitifiers. A secure device identifier (DevID) is defined as an identifier that is cryptographically bound to a device \cite{DevIDSpec-IEEE}. 
+A DevID must not be transferable from one device to another as that would allow distinct devices to be identified as the same. 
+Since the Trusted Platform Module (TPM) is a secure Root of Trust for Storage, it provides the necessary protections for storing these identifiers and enforcing this constraint. 
+
+The TCG's specification "TPM 2.0 Keys for Device Identity and Attestation" describes several methods for remotely proving a key to be resident in a specific device's TPM. These methods are carefully constructed protocols which are intended to be performed by a trusted Certificate Authority (CA) in communication with a certificate-requesting device. These protocols are designed to maintain a cryptographic evidentiary chain linking a DevID to a specific TPM \cite{DevIDSpec-TCG}. 
+DevID certificates provisioned by an OEM at device manufacturing time provide definitive evidence that a key belongs to a specific device. Whereas DevID certificates provisioned by a device owner require a chain of certificates to prove that a key belongs to a specific device. This distinction is due to differences in the respective protocols prescribed by the TCG's specification. 
+For each provisioning protocol described in the specification, the TCG outlines steps for the CA and the certificate-requesting entity to perform. Furthermore, the TCG claims that each protocol provides certain assurances. These assurances are the basis for the resulting cryptographic evidentiary chain.
+Each assurance manifests as an assertion regarding either TPM-residency, key attributes, or previously-issued certificates.
+
+This work places special emphasis on two of the DevID-provisioning protocols, namely OEM Creation of an IAK Certificate based on an EK Certificate and Owner Creation of an LAK Certificate based on an IAK Certificate. I select these protocols due to their especially significant security implications. The primary goal of this work is to abstractly model these two protocols and formally verify their resulting assurances. I choose this goal since the TCG themselves do not provide any proofs or clear justifications for how the protocols might provide these assurances. 
 
 
-the following capitalized titles of TPM Manufacturer, OEM, and Owner are keywords that will be referenced throughout this paper
 
-simplified version of the process for creating and distributing TPM-containing devices to the end user
 
-\begin{enumerate}
-  \item\label{ite:idTPM} TPM Manufacturers produce TPM chips according to the international standard. They provision each TPM chip with one or more certificates which bind a key to that specific TPM. These chips are then distributed to the original equipment manufacturers (OEMs).
-  \item\label{ite:idDevIni} OEMs produce devices (e.g., PCs) with these TPM chips integrated. They provision each TPM chip with one or more certificates which bind a key to that specific device. These devices are then distributed to the end users (Owners).
-  \item\label{ite:idDevLoc} Owners may optionally provision their TPM chip(s) with one or more certificates which bind a key to that specific device.
-\end{enumerate} 
+% related works
 
-the provisioning of device identification in Steps \ref{ite:idDevIni} and \ref{ite:idDevLoc} is the subject of this paper
+\section{Related Works}
+Related Works
+\cite{DAAAnalysis}
+\cite{TPM12Model}
+\cite{PrivacyCAAnalysis}
+\cite{AuthAnalysis}
+\cite{PCRAnalysis}
+\cite{EAAnalysis}
+\cite{HMACAnalysis}
+
+
+
