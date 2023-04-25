@@ -1,24 +1,24 @@
 \babel@toc {english}{}\relax 
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {2.1}{\ignorespaces Model of Keys\relax }}{5}{figure.caption.4}%
-\contentsline {figure}{\numberline {2.2}{\ignorespaces Equality in Coq\relax }}{6}{figure.caption.5}%
-\contentsline {figure}{\numberline {2.3}{\ignorespaces Decidable Equality\relax }}{7}{figure.caption.6}%
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Model of Keys\relax }}{6}{figure.caption.4}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Equality in Coq\relax }}{7}{figure.caption.5}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Decidable Equality\relax }}{8}{figure.caption.6}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Model of Certificates\relax }}{11}{figure.caption.8}%
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Key and Certificate Relationships \cite {DevIDSpec-TCG}\relax }}{12}{figure.caption.9}%
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Model of Certificates\relax }}{12}{figure.caption.8}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Key and Certificate Relationships \cite {DevIDSpec-TCG}\relax }}{13}{figure.caption.9}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Model of Messages\relax }}{14}{figure.caption.10}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Type Signature of Execute Relation\relax }}{15}{figure.caption.11}%
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Model of Commands\relax }}{16}{figure.caption.12}%
-\contentsline {figure}{\numberline {4.4}{\ignorespaces Model of Command Sequences\relax }}{19}{figure.caption.13}%
-\contentsline {figure}{\numberline {4.5}{\ignorespaces Properties of Sequential Execution\relax }}{19}{figure.caption.14}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Model of Messages\relax }}{15}{figure.caption.10}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Type Signature of Execute Relation\relax }}{16}{figure.caption.11}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Model of Commands\relax }}{17}{figure.caption.12}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Model of Command Sequences\relax }}{20}{figure.caption.13}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Properties of Sequential Execution\relax }}{20}{figure.caption.14}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {5.1}{\ignorespaces Parameters of LAK Certification Protocol\relax }}{23}{figure.caption.15}%
-\contentsline {figure}{\numberline {5.2}{\ignorespaces Model of LAK Certification Protocol\relax }}{25}{figure.caption.16}%
-\contentsline {figure}{\numberline {5.3}{\ignorespaces Minimal Initial State of Owner\relax }}{26}{figure.caption.17}%
-\contentsline {figure}{\numberline {5.4}{\ignorespaces Assumptions on the Untrusted Owner\relax }}{27}{figure.caption.18}%
-\contentsline {figure}{\numberline {5.5}{\ignorespaces Parameters of IAK Certification Protocol\relax }}{30}{figure.caption.19}%
-\contentsline {figure}{\numberline {5.6}{\ignorespaces Model of IAK Certification Protocol\relax }}{31}{figure.caption.20}%
-\contentsline {figure}{\numberline {5.7}{\ignorespaces Assumptions on the Untrusted OEM\relax }}{33}{figure.caption.21}%
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Parameters of LAK Certification Protocol\relax }}{24}{figure.caption.15}%
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Model of LAK Certification Protocol\relax }}{26}{figure.caption.16}%
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Minimal Initial State of Owner\relax }}{27}{figure.caption.17}%
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Assumptions on the Untrusted Owner\relax }}{28}{figure.caption.18}%
+\contentsline {figure}{\numberline {5.5}{\ignorespaces Parameters of IAK Certification Protocol\relax }}{31}{figure.caption.19}%
+\contentsline {figure}{\numberline {5.6}{\ignorespaces Model of IAK Certification Protocol\relax }}{32}{figure.caption.20}%
+\contentsline {figure}{\numberline {5.7}{\ignorespaces Assumptions on the Untrusted OEM\relax }}{34}{figure.caption.21}%
 \addvspace {10\p@ }

@@ -22,25 +22,18 @@ This work places special emphasis on two of the DevID-provisioning protocols, na
 \section{Related Works}
 
 
+The Privacy CA protocol of the TPM 1.2 has been extensively studied using various formal methods. The Privacy CA protocol was replaced by the Direct Anonymous Attestion scheme in the TPM 2.0. Both of these protocols aim to accomplish the same fundamental purpose: allow remote authentication of a device while maintaining its anonymity. These protocols differ from the identity-provisioning protocols analyzed in my work which aim to provide individual identification of a device.
+The work of Chen et al. \cite{PrivacyCAAnalysis-Chen} analyzes the Privacy CA protocol in the presence of an adversary. They suggest a small modification to the protocol which enhances its security without changing the existing functionality of the TPM 1.2. 
+On the other hand, the work of Halling et al. \cite{PrivacyCAAnalysis-Hall,TPM12Model} analyzes this same protocol but does not consider any specific adversary. Instead, they consider the functional correctness of the protocol and specifically examine the protocol implementation to ensure that it produces the results that it should.  
+My work has many parallels to the works of Halling et al. 
+I attempt to determine whether the implementations of certain identity-provisioning protocols result in the assurances that they should.
+Furthermore, Halling et al. abstractly model a large subset of the TPM 1.2 commands in the PVS specification language. They model TPM command execution as a transition system over an abstract system state. I implement this same technique in my own work but over a small subset of TPM 2.0 commands as well as several non-TPM commands. 
 
-My work has many parallels to the work of Halling et al. \cite{TPM12Model,PrivacyCAAnalysis}.
-They abstractly model a large subset of the TPM 1.2 commands in the PVS specification language. TPM command execution is modeled as a transition system over an abstract system state. I implement this same technique in my own work but over a small subset of TPM 2.0 commands as well as several non-TPM commands. Their work attempts verification of the Privacy CA protocol. In their verification, they consider the functional correctness of the protocol and specifically examine the protocol implementation to ensure that it produces the structure that it should. They do not consider specific attacks on this structure. Similarly, my work attempts verification of protocols involving a certificate authority and focuses on determining whether the protocol implementations result in the assurances that they should provide.
+The works of Whitefield et al. \cite{DAAAnalysis-Whit} and Wesemeyer et al. \cite{DAAAnalysis-Wes} thoroughly study the DAA scheme of the TPM 2.0. Collectively, they develop a symbolic model, a C++ implementation, and formally-verified fix of the scheme. 
+Many other works use formal methods to examine other aspects of both the TPM 1.2 \cite{AuthAnalysis,PCRAnalysis} and 2.0 \cite{EAAnalysis,HMACAnalysis}.
+These aspects include Authentication, PCRs, EA, and HMAC mechanisms. They utilize tools and techniques such as SAPIC, Tamarin, stateful applied pi calculus, amongst others.
 
-The work of Delaune et al. uses the ProVerif tool to examine  Authentication and PCRs in the TPM 1.2 
-\cite{AuthAnalysis,PCRAnalysis}.
-Their work focuses on verifying cryptographic properties over these elements of the TPM.
-
-
-3,4
-Related Works
-\cite{DAAAnalysis} 
-Tamarin prover
-
-\cite{EAAnalysis} 
-stateful applied pi calculus
-SAPIC tool and Tamarin prover
-
-\cite{HMACAnalysis}
+%The works of Delaune et al. \cite{AuthAnalysis,PCRAnalysis} use the ProVerif tool to examine other aspects of the TPM 1.2, namely Authentication and PCRs. Their works focus on verifying cryptographic properties over these TPM mechanisms. The works of use Shao et al. \cite{EAAnalysis,HMACAnalysis} model the EA and HMAC mechanisms of the TPM 2.0 using the stateful applied pi calculus. They formalize the security properties of these mechanisms and use the SAPIC tool and Tamarin prover to authomatically analyze their model under specific attacking scenarios.
 
 
 

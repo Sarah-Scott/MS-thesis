@@ -4,45 +4,45 @@ The top-level auxiliary file: ku_thesis_template.aux
 The style file: apalike2.bst
 Database file #1: thesis_bibliography.bib
 Warning--empty journal in CIC
-You've used 14 entries,
+You've used 16 entries,
             2229 wiz_defined-function locations,
-            598 strings with 6504 characters,
-and the built_in function-call counts, 5640 in all, are:
-= -- 553
-> -- 222
-< -- 13
-+ -- 76
-- -- 72
-* -- 430
-:= -- 963
-add.period$ -- 38
-call.type$ -- 14
-change.case$ -- 99
-chr.to.int$ -- 12
-cite$ -- 15
-duplicate$ -- 250
-empty$ -- 400
-format.name$ -- 88
-if$ -- 1141
+            611 strings with 7006 characters,
+and the built_in function-call counts, 6788 in all, are:
+= -- 666
+> -- 268
+< -- 16
++ -- 94
+- -- 88
+* -- 516
+:= -- 1135
+add.period$ -- 44
+call.type$ -- 16
+change.case$ -- 117
+chr.to.int$ -- 14
+cite$ -- 17
+duplicate$ -- 304
+empty$ -- 484
+format.name$ -- 108
+if$ -- 1393
 int.to.chr$ -- 3
 int.to.str$ -- 0
-missing$ -- 11
-newline$ -- 69
-num.names$ -- 46
-pop$ -- 108
+missing$ -- 13
+newline$ -- 79
+num.names$ -- 52
+pop$ -- 133
 preamble$ -- 1
-purify$ -- 103
+purify$ -- 121
 quote$ -- 0
-skip$ -- 199
+skip$ -- 242
 stack$ -- 0
-substring$ -- 343
-swap$ -- 58
-text.length$ -- 5
+substring$ -- 425
+swap$ -- 78
+text.length$ -- 7
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 82
+type$ -- 94
 warning$ -- 1
-while$ -- 46
+while$ -- 54
 width$ -- 0
-write$ -- 179
+write$ -- 205
 (There was 1 warning)

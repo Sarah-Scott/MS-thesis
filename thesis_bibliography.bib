@@ -6,7 +6,7 @@
 % Cite LogicalFoundations
 
 
-@InProceedings{PrivacyCAAnalysis,
+@InProceedings{PrivacyCAAnalysis-Hall,
   author    = {Brigid Halling and Perry Alexander},
   editor    = {Guillaume Brat and Neha Rungta and Arnaud Venet},
   title     = {{Verifying a Privacy CA Remote Attestation Protocol}},
@@ -28,7 +28,16 @@
   year      = {2013}
 }
 
-@InProceedings{DAAAnalysis,
+@InProceedings{PrivacyCAAnalysis-Chen,
+  author    = {Chen, Liqun and Warinschi, Bogdan},
+  booktitle = {2010 IEEE/IFIP International Conference on Embedded and Ubiquitous Computing}, 
+  title     = {Security of the TCG Privacy-CA Solution}, 
+  year      = {2010},
+  pages     = {609-616},
+  doi       = {10.1109/EUC.2010.98}
+}
+
+@InProceedings{DAAAnalysis-Wes,
   author    = {Wesemeyer, Stephan and Newton, Christopher J.P. and Treharne, Helen and Chen, Liqun and Sasse, Ralf and Whitefield, Jorden},
   title     = {{Formal Analysis and Implementation of a TPM 2.0-Based Direct Anonymous Attestation Scheme}},
   year      = {2020},
@@ -43,9 +52,30 @@
   series    = {ASIA CCS '20}
 }
 
+@InProceedings{DAAAnalysis-Whit,
+  author    = {Whitefield, Jorden and Chen, Liqun and Sasse, Ralf and Schneider, Steve and Treharne, Helen and Wesemeyer, Stephan},
+  booktitle = {2019 IEEE European Symposium on Security and Privacy (EuroS\&P)}, 
+  title     = {A Symbolic Analysis of ECC-Based Direct Anonymous Attestation}, 
+  year      = {2019},
+  pages     = {127-141},
+  doi       = {10.1109/EuroSP.2019.00019}
+}
+
+
+@InProceedings{AuthAnalysis,
+  author    = {Delaune, St{\'e}phanie and Kremer, Steve and Ryan, Mark D. and Steel, Graham},
+  editor    = {Degano, Pierpaolo and Etalle, Sandro and Guttman, Joshua},
+  title     = {{A Formal Analysis of Authentication in the TPM}},
+  booktitle = {Formal Aspects of Security and Trust},
+  year      = {2011},
+  publisher = {Springer Berlin Heidelberg},
+  address   = {Berlin, Heidelberg},
+  pages     = {111--125},
+  isbn      = {978-3-642-19751-2}
+}
 
 @InProceedings{PCRAnalysis,
-  author    = {Delaune, Stephanie and Kremer, Steve and Ryan, Mark D. and Steel, Graham},
+  author    = {Delaune, St\{'e}phanie and Kremer, Steve and Ryan, Mark D. and Steel, Graham},
   booktitle = {2011 IEEE 24th Computer Security Foundations Symposium}, 
   title     = {{Formal Analysis of Protocols Based on TPM State Registers}}, 
   year      = {2011},
@@ -70,20 +100,6 @@ location    = {Singapore, Republic of Singapore},
 series      = {ASIA CCS '15}
 }
 
-
-
-@InProceedings{AuthAnalysis,
-  author    = {Delaune, St{\'e}phanie and Kremer, Steve and Ryan, Mark D. and Steel, Graham},
-  editor    = {Degano, Pierpaolo and Etalle, Sandro and Guttman, Joshua},
-  title     = {{A Formal Analysis of Authentication in the TPM}},
-  booktitle = {Formal Aspects of Security and Trust},
-  year      = {2011},
-  publisher = {Springer Berlin Heidelberg},
-  address   = {Berlin, Heidelberg},
-  pages     = {111--125},
-  isbn      = {978-3-642-19751-2}
-}
-
 @article{HMACAnalysis,
 author      = {Shao, Jianxiong and Qin, Yu and Feng, Dengguo},
 title       = {{Formal Analysis of HMAC Authorisation in the TPM 2.0 Specification}},
@@ -95,6 +111,16 @@ doi = {10.1049/iet-ifs.2016.0005},
 url = {https://ietresearch.onlinelibrary.wiley.com/doi/abs/10.1049/iet-ifs.2016.0005},
 year = {2018}
 }
+
+
+@inproceedings{VRASED,
+title       = {VRASED: A Verified Hardware/Software Co-Design for Remote Attestation},
+author      = {Nunes, Ivan De Oliveira and Eldefrawy, Karim and Rattanavipanon, Norrathep and Steiner, Michael and Tsudik, Gene},
+booktitle   = {USENIX Security Symposium},
+pages       = {1429--1446},
+year        = {2019}
+}
+
 
 @Manual{DevIDSpec-TCG,
   author    = {{Trusted Computing Group}},
