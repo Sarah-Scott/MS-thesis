@@ -3,8 +3,8 @@
 
 
 
-% DEFINE COMMAND IN SEQUENCE FUNCTION
 % INCLUDE REFERENCE to BRIGET'S TPM STATE DICTIONARY
+
 % maybe elaborate on sequential execution
 % maybe elaborate on each command's real-life implementation
 
@@ -126,7 +126,7 @@ Inductive seq_execute : tpm_state * state -> sequence -> tpm_state * state -> Pr
 \end{figure}
 Sequential execution is done by first executing the command at the head of the list using the single command execution relation \verb|execute| followed by executing the sequence at the tail of the list using the sequential execution relation \verb|seq_execute|. The final state pair produced by executing the single command is used as the initial state pair for the subsequent sequence. This recursive structure allows for the convenient use of induction in many proofs.
 %The \verb|seq_execute| relation executes the command at the head of the list using the \verb|execute| relation then recursively uses the \verb|seq_execute| relation to execute the tail of the list using the resulting final state pair as the initial state.
-In fact, I prove several interesting and useful facts about the \verb|seq_execute| relation. Firstly, sequential execution is deterministic. Given an initial state pair and a command sequence, there is at most one final state pair which satisfies the \verb|seq_execute| relation. This means that \verb|seq_execute| is a partial function. Next, sequential execution is an expansion. Given a related initial state pair, command sequence, and final state pair, the initial state is always a subset of the final state (i.e., \verb|seq_execute| expands on the initial state). In particular, commands do not remove elements from the state.  
+In fact, I prove several interesting and useful facts about the \verb|seq_execute| relation. Firstly, sequential execution is deterministic. Given an initial state pair and a command sequence, there is at most one final state pair which satisfies the \verb|seq_execute| relation. This means that \verb|seq_execute| is a partial function. Next, sequential execution is an expansion. Given a related initial state pair, command sequence, and final state pair, the initial state is always a subset of the final state (i.e., \verb|seq_execute| expands on the initial state). This means that commands do not remove elements from the state.  
 %Furthermore, sequential execution cannot generate encrypted credentials without a nonce in the initial \verb|state| and cannot generate nonces without an encrypted credential in the initial \verb|state|.  Finally, sequential execution cannot generate keys. This last feature is due to the deliberate exclusion of certain TPM commands from the language.
 \begin{figure}[h]
 \begin{lstlisting}[language=Coq]
@@ -142,4 +142,5 @@ Theorem seq_exec_expansion : forall iniTPM ini s finTPM fin,
 \caption{Properties of Sequential Execution}
 \end{figure}
 
-I define a recursive function which determines whether a provided command is an element of a provided sequence. Not only is the command itself required to match but all of its inputs must as well.
+It is useful to know whether a particular command is contained within a sequence. Therefore, I define a function \verb|command_in_sequence| which determines whether a provided command is an element of a provided sequence. This function is implemented by checking the command at the head of the list against the provided command. If they match, return True. Otherwise, recursively call the function on the tail of the sequence.
+For two commands to match, not only must the commands itself match but all of their inputs as well. To precisely describe this situation, this function utilizes the decidable equality property over the \verb|command| type. This requires declaring and proving that the \verb|command| type and all of the types it relies on (e.g., message, pubKey, signedCert) a member of the \verb|DecEq| class. These proofs may be conveniently automated.

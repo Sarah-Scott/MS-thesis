@@ -1,7 +1,6 @@
 \chapter{Background}
 
 
-
 \section{TPM 2.0}
 
 A Trusted Platform Module (TPM) is a microcontroller that complies with the ISO/IEC 11889:2015 international standard.
@@ -10,7 +9,7 @@ The TPM and its specification were designed by the Trusted Computing Group (TCG)
 The TPM's key generator is based on its own random number generator (RNG) so that it does not rely on external sources of randomness. These keys can be used for a multitude of purposes and may be created or destroyed as often as needed. Due to algorithm agility, the TPM can use nearly any cryptographic algorithm. As a result, keys may utilize asymmetric algorithms such as RSA or ECC, or they may utilize symmetric algorithms such as AES or DES. Additionally, a variety of key strengths (i.e., key sizes) and hash algorithms may be used. By design, keys stored within the TPM are protected against software attacks. Keys may optionally be further protected using enhanced authorization. Enhanced authorization (EA) allows a key or other TPM object to be authorized using a password, HMAC, or policy. This flexibility allows for varying complexities in the requirements for accessing an entity. 
 
 
-Device health attestation data provided by a TPM offers cryptographic proof of software state. Attestation data comes in the form of a quote which is a signed hash over a selection of platform configuration registers. Platform configuration registers (PCRs) store the results from a chain of boot time measurements in a way that guarantees integrity. In particular, a PCR cannot be rolled back to a previous value resulting in a measurement being undone. To tie attestation data to a specific device, the key that performed the signing operation must be cryptographically bound to that device, that is, the key must be a secure device identifier. There exist a variety of additional applications, such as network authentication, which similarly require a device to be definitively identified. Public key certificates may be distributed to remote entities in order to prove that the corresponding private key resides in a specific TPM-containing device. These certificates are stored within the TPM's NVRAM providing protection from accidental erasure. 
+Device health attestation data provided by a TPM offers cryptographic proof of software state. Attestation data comes in the form of a quote which is a signed hash over a selection of platform configuration registers. Platform configuration registers (PCRs) store the results from a chain of boot time measurements in a way that guarantees integrity. In particular, a PCR cannot be rolled back to a previous value resulting in a measurement being undone. To tie attestation data to a specific device, the key that performed the signing operation must be cryptographically bound to that device, that is, the key must be a secure device identifier. There exist a variety of additional applications, such as network authentication, which similarly require a device to be definitively identified. DevID certificates may be distributed to remote entities in order to prove that the corresponding private key resides in a specific TPM-containing device. These certificates are stored within the TPM's NVRAM providing protection from accidental erasure. 
 
 
 
@@ -48,31 +47,10 @@ The \verb|Restricted| attribute provides important security implications. A rest
 
 
 A restricted decryption key is called a storage key. Only storage keys can be used as parents to create or load child objects or to activate credentials \cite{PracticalGuide}. All TPMs are shipped with an essential storage key: the endorsement key. The endorsement key (EK) is installed by the TPM manufacturer and stored in a shielded location on the TPM. The corresponding EK certificate serves a significant role in the enrollment of secure device identifiers. 
-%This process will be discussed in further detail in later sections.
+This process will be discussed in further detail in later sections.
 
 
-The term certificate specifically refers to an X.509 v3 digital certificate. 
-A certificate contains a public key and identitying information and is signed by a trusted Certificate Authority.
-In particular, a certificate binds a key to an identity. 
-It is useful to briefly consider a simplified version of the process for creating and distributing TPM-containing devices to end users. The provisioning of device identification in Steps \ref{ite:idDevIni} and \ref{ite:idDevLoc} is the subject of this paper.
-\begin{enumerate}
-  \item\label{ite:idTPM} TPM Manufacturers produce TPM chips according to the international standard. They provision each TPM chip with a certificate which binds the endorsement key to that specific TPM. These chips are then distributed to the original equipment manufacturers (OEMs).
-  \item\label{ite:idDevIni} OEMs produce devices (e.g., PCs) with these TPM chips integrated. They provision each TPM chip with one or more certificates which bind a key to that specific device. These devices are then distributed to the end users (Owners).
-  \item\label{ite:idDevLoc} Owners may optionally provision their TPM chip(s) with one or more certificates which bind a key to that specific device.
-\end{enumerate} 
 
-Since an EK certificate binds an EK to a specific TPM, this certificate includes various assertions regarding the security qualities and provenance of the TPM \cite{EKSpec}.  For keys created by entities other than the TPM manufacturer (i.e., the OEM and the Owner), a certificate's identity field contains non-TPM device information (e.g., device model and serial numbers). This information should be globally unique per device \cite{DevIDSpec-IEEE}. In this model, certificates are abstractly defined as the inductive \verb|signedCert| type. A \verb|signedCert| requires a public key, an identifier, and a private key. An identifier may include include information describing either the TPM or the device. The private key parameter denotes the key which performed the signature over the certificate.
-\begin{figure}[h]
-\begin{lstlisting}[language=Coq]
-Inductive identifier : Type :=
-| TPM_info : tpmInfoType -> identifier
-| Device_info : deviceInfoType -> identifier.
-
-Inductive signedCert : Type :=
-| Cert : pubKey -> identifier -> privKey -> signedCert.
-\end{lstlisting}
-\caption{Model of Certificates}
-\end{figure}
 
 
 

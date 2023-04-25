@@ -1,7 +1,6 @@
 \chapter{Introduction}
 
 % RELATED WORKS SECTION
-% maybe expand introduction
 
 
 Development and deployment of trusted systems often require definitive identification of devices. A remote entity should have confidence that a device is as it claims to be. An ideal method for fulfulling this need is through the utilization of TPM keys as secure device identitifiers. A secure device identifier (DevID) is defined as an identifier that is cryptographically bound to a device \cite{DevIDSpec-IEEE}. 
@@ -21,13 +20,26 @@ This work places special emphasis on two of the DevID-provisioning protocols, na
 % related works
 
 \section{Related Works}
+
+
+
+My work has many parallels to the work of Halling et al. \cite{TPM12Model,PrivacyCAAnalysis}.
+They abstractly model a large subset of the TPM 1.2 commands in the PVS specification language. TPM command execution is modeled as a transition system over an abstract system state. I implement this same technique in my own work but over a small subset of TPM 2.0 commands as well as several non-TPM commands. Their work attempts verification of the Privacy CA protocol. In their verification, they consider the functional correctness of the protocol and specifically examine the protocol implementation to ensure that it produces the structure that it should. They do not consider specific attacks on this structure. Similarly, my work attempts verification of protocols involving a certificate authority and focuses on determining whether the protocol implementations result in the assurances that they should provide.
+
+The work of Delaune et al. uses the ProVerif tool to examine  Authentication and PCRs in the TPM 1.2 
+\cite{AuthAnalysis,PCRAnalysis}.
+Their work focuses on verifying cryptographic properties over these elements of the TPM.
+
+
+3,4
 Related Works
-\cite{DAAAnalysis}
-\cite{TPM12Model}
-\cite{PrivacyCAAnalysis}
-\cite{AuthAnalysis}
-\cite{PCRAnalysis}
-\cite{EAAnalysis}
+\cite{DAAAnalysis} 
+Tamarin prover
+
+\cite{EAAnalysis} 
+stateful applied pi calculus
+SAPIC tool and Tamarin prover
+
 \cite{HMACAnalysis}
 
 

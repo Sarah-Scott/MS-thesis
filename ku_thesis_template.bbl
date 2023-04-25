@@ -24,16 +24,16 @@ Delaune, S., Kremer, S., Ryan, M.~D., \& Steel, G. (2011b).
 \newblock In {\em 2011 IEEE 24th Computer Security Foundations Symposium}
   (pp.\ 66--80).
 
+\bibitem[Halling, 2013]{TPM12Model}
+Halling, B. (2013).
+\newblock {Towards a Formal Verification of the Trusted Platform Module}.
+\newblock Master's thesis, University of Kansas.
+
 \bibitem[Halling \& Alexander, 2013]{PrivacyCAAnalysis}
 Halling, B. \& Alexander, P. (2013).
 \newblock {Verifying a Privacy CA Remote Attestation Protocol}.
 \newblock In G. Brat, N. Rungta, \& A. Venet (Eds.), {\em NASA Formal Methods}
   (pp.\ 398--412).  Berlin, Heidelberg: Springer Berlin Heidelberg.
-
-\bibitem[Halling, 2013]{TPM12Model}
-Halling, B.~R. (2013).
-\newblock {Towards a Formal Verification of the Trusted Platform Module}.
-\newblock Master's thesis, University of Kansas.
 
 \bibitem[{Institute of Electrical and Electronics Engineers},
   2018]{DevIDSpec-IEEE}
