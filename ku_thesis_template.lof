@@ -14,11 +14,11 @@
 \contentsline {figure}{\numberline {4.4}{\ignorespaces Model of Command Sequences\relax }}{20}{figure.caption.13}%
 \contentsline {figure}{\numberline {4.5}{\ignorespaces Properties of Sequential Execution\relax }}{20}{figure.caption.14}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {5.1}{\ignorespaces Parameters of LAK Certification Protocol\relax }}{24}{figure.caption.15}%
-\contentsline {figure}{\numberline {5.2}{\ignorespaces Model of LAK Certification Protocol\relax }}{26}{figure.caption.16}%
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Parameters of LAK Provisioning Protocol\relax }}{24}{figure.caption.15}%
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Model of LAK Provisioning Protocol\relax }}{26}{figure.caption.16}%
 \contentsline {figure}{\numberline {5.3}{\ignorespaces Minimal Initial State of Owner\relax }}{27}{figure.caption.17}%
-\contentsline {figure}{\numberline {5.4}{\ignorespaces Assumptions on the Untrusted Owner\relax }}{28}{figure.caption.18}%
-\contentsline {figure}{\numberline {5.5}{\ignorespaces Parameters of IAK Certification Protocol\relax }}{31}{figure.caption.19}%
-\contentsline {figure}{\numberline {5.6}{\ignorespaces Model of IAK Certification Protocol\relax }}{32}{figure.caption.20}%
-\contentsline {figure}{\numberline {5.7}{\ignorespaces Assumptions on the Untrusted OEM\relax }}{34}{figure.caption.21}%
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Final Verification Goal for LAK provisioning Protocol\relax }}{28}{figure.caption.18}%
+\contentsline {figure}{\numberline {5.5}{\ignorespaces Parameters of IAK provisioning Protocol\relax }}{32}{figure.caption.19}%
+\contentsline {figure}{\numberline {5.6}{\ignorespaces Model of IAK provisioning Protocol\relax }}{33}{figure.caption.20}%
+\contentsline {figure}{\numberline {5.7}{\ignorespaces Final Verification Goal for IAK provisioning Protocol\relax }}{34}{figure.caption.21}%
 \addvspace {10\p@ }

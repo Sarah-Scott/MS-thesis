@@ -10,7 +10,7 @@
 \contentsline {chapter}{\numberline {4}Command Execution Model}{15}{chapter.4}%
 \contentsline {chapter}{\numberline {5}Identity Provisioning}{22}{chapter.5}%
 \contentsline {section}{\numberline {5.1}Owner Creation of LAK Certificate based on IAK Certificate}{23}{section.5.1}%
-\contentsline {section}{\numberline {5.2}OEM Creation of IAK Certificate based on EK Certificate}{30}{section.5.2}%
-\contentsline {chapter}{\numberline {6}Conclusion}{35}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Conclusion}{35}{section.6.1}%
-\contentsline {section}{\numberline {6.2}Future Work}{35}{section.6.2}%
+\contentsline {section}{\numberline {5.2}OEM Creation of IAK Certificate based on EK Certificate}{31}{section.5.2}%
+\contentsline {chapter}{\numberline {6}Conclusion}{37}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Conclusion}{37}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Future Work}{37}{section.6.2}%
