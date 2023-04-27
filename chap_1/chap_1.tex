@@ -3,28 +3,29 @@
 
 
 
-Development and deployment of trusted systems often require definitive identification of devices. A remote entity should have confidence that a device is as it claims to be. An ideal method for fulfulling this need is through the utilization of TPM keys as secure device identitifiers. A secure device identifier (DevID) is defined as an identifier that is cryptographically bound to a device \cite{DevIDSpec-IEEE}. 
+Development and deployment of trusted systems often require definitive identification of devices. A remote entity should have confidence that a device is that which it claims to be. An ideal method for fulfulling this need is through the utilization of TPM keys as secure device identitifiers. A secure device identifier (DevID) is defined as an identifier that is cryptographically bound to a device \cite{DevIDSpec-IEEE}. 
 A DevID must not be transferable from one device to another as that would allow distinct devices to be identified as the same. 
 Since the Trusted Platform Module (TPM) is a secure Root of Trust for Storage, it provides the necessary protections for storing these identifiers and enforcing this constraint. 
 
 The TCG's specification "TPM 2.0 Keys for Device Identity and Attestation" describes several methods for remotely proving a key to be resident in a specific device's TPM. These methods are carefully constructed protocols which are intended to be performed by a trusted Certificate Authority (CA) in communication with a certificate-requesting device. These protocols are designed to maintain a cryptographic evidentiary chain linking a DevID to a specific TPM \cite{DevIDSpec-TCG}. 
-DevID certificates provisioned by an OEM at device manufacturing time provide definitive evidence that a key belongs to a specific device. Whereas DevID certificates provisioned by a device owner require a chain of certificates to prove that a key belongs to a specific device. This distinction is due to differences in the respective protocols prescribed by the TCG's specification. 
+DevID certificates provisioned by an OEM at device manufacturing time should provide definitive evidence that a key belongs to a specific device. Whereas DevID certificates provisioned by a device owner require a chain of certificates to prove that a key belongs to a specific device. This distinction is due to differences in the respective protocols prescribed by the TCG's specification. 
 For each provisioning protocol described in the specification, the TCG outlines steps for the CA and the certificate-requesting entity to perform. Furthermore, the TCG claims that each protocol provides certain assurances. These assurances are the basis for the resulting cryptographic evidentiary chain.
 Each assurance manifests as an assertion regarding either TPM-residency, key attributes, or previously-issued certificates.
 
-This work places special emphasis on two of the DevID-provisioning protocols, namely OEM Creation of an IAK Certificate based on an EK Certificate and Owner Creation of an LAK Certificate based on an IAK Certificate. I select these protocols due to their especially significant security implications. The primary goal of this work is to abstractly model these two protocols and formally verify their resulting assurances. I choose this goal since the TCG themselves do not provide any proofs or clear justifications for how the protocols might provide these assurances. 
+This work places special emphasis on two of the DevID-provisioning protocols, namely OEM Creation of an IAK Certificate based on an EK Certificate and Owner Creation of an LAK Certificate based on an IAK Certificate. I select these protocols due to their especially significant security and identity implications. The primary goal of this work is to abstractly model these two protocols and formally verify their resulting assurances. I choose this goal since the TCG themselves do not provide any proofs or clear justifications for how the protocols might provide these assurances. 
+
+The contributions of the research presented in this thesis may be summarized as (1) a general investigation into TPM-based DevIDs and chains of certificates, (2) the design and implementation of an abstract formal model of command execution, (3) an in-depth analysis of two TCG-provided DevID provisioning procedures, and (4) the discovery of a potential shortcoming of the IAK provisioning procedure and consequently a recommendation for its improvement.
 
 
 
 
-% related works
 
 \section{Related Works}
 
 
-The Privacy CA protocol of the TPM 1.2 has been extensively studied using various formal methods. The Privacy CA protocol was replaced by the Direct Anonymous Attestion scheme in the TPM 2.0. Both of these protocols aim to accomplish the same fundamental purpose: allow remote authentication of a device while maintaining its anonymity. These protocols differ from the identity-provisioning protocols analyzed in my work which aim to provide individual identification of a device.
-The work of Chen et al. \cite{PrivacyCAAnalysis-Chen} analyzes the Privacy CA protocol in the presence of an adversary. They suggest a small modification to the protocol which enhances its security without changing the existing functionality of the TPM 1.2. 
-On the other hand, the work of Halling et al. \cite{PrivacyCAAnalysis-Hall,TPM12Model} analyzes this same protocol but does not consider any specific adversary. Instead, they consider the functional correctness of the protocol and specifically examine the protocol implementation to ensure that it produces the results that it should.  
+The Privacy CA protocol of the TPM 1.2 has been extensively studied using various formal methods. The Privacy CA protocol was replaced by the Direct Anonymous Attestation scheme in the TPM 2.0. Both of these protocols aim to accomplish the same fundamental purpose: allow remote authentication of a device while maintaining its anonymity. These protocols differ from the identity-provisioning protocols analyzed in my work which aim to provide individual identification of a device.
+The work of Chen et al. \cite{PrivacyCAAnalysis-Chen} analyzes the Privacy CA protocol in the presence of an adversary. They suggest a small modification to the protocol which enhances its security without changing the existing functionality of the TPM 1.2. I similarly suggest a small modification to the IAK provisioning protocol which requires no change to the existing functionality of the TPM 2.0.
+On the other hand, the work of Halling et al. \cite{PrivacyCAAnalysis-Hall,TPM12Model} analyzes the Privacy CA protocol but does not consider any specific adversary. Instead, they consider the functional correctness of the protocol and specifically examine the protocol implementation to ensure that it produces the results that it should.  
 My work has many parallels to the works of Halling et al. 
 I attempt to determine whether the implementations of certain identity-provisioning protocols result in the assurances that they should.
 Furthermore, Halling et al. abstractly model a large subset of the TPM 1.2 commands in the PVS specification language. They model TPM command execution as a transition system over an abstract system state. I implement this same technique in my own work but over a small subset of TPM 2.0 commands as well as several non-TPM commands. 

@@ -6,12 +6,12 @@ Database file #1: thesis_bibliography.bib
 Warning--empty journal in CIC
 You've used 16 entries,
             2229 wiz_defined-function locations,
-            611 strings with 7006 characters,
-and the built_in function-call counts, 6788 in all, are:
+            611 strings with 7020 characters,
+and the built_in function-call counts, 6780 in all, are:
 = -- 666
 > -- 268
 < -- 16
-+ -- 94
++ -- 90
 - -- 88
 * -- 516
 := -- 1135
@@ -35,7 +35,7 @@ purify$ -- 121
 quote$ -- 0
 skip$ -- 242
 stack$ -- 0
-substring$ -- 425
+substring$ -- 421
 swap$ -- 78
 text.length$ -- 7
 text.prefix$ -- 0

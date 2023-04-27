@@ -1,7 +1,7 @@
 
 \chapter{Command Execution Model}
 
-% maybe elaborate 
+% maybe elaborate on model of make/activate credential
 
 
 The protocols used to enroll DevID certificates require both TPM and non-TPM commands to be performed by the CA and the requesting device. A command may rely on a variety of parameters such as keys, nonces, certificates, as well as other messages. A message includes all of the structures that an entity may use or produce. The \verb|message| type is 
@@ -22,7 +22,7 @@ Inductive message : Type :=
 \end{lstlisting}
 \caption{Model of Messages}
 \end{figure}
-an abstract representation of these structures. From a message, additional messages may be inferred. For example, given a message in the form \verb|signature m k|, the message \verb|m| may be deduced. Whereas given a message in the form \verb|encryptedCredential n g k|, no messages may be deduced. This concept is modeled in two ways: as a recursive function \verb|inferFrom| and as an inductive proposition \verb|inferrable|. These two definitions are proven to be equivalent. In particular, additional information may be gained from signatures, TPM2B\_Attest structures, certificate signing requests (CSRs), public key certificates, and pairs of messages. All other messages either contain no additional information (i.e., keys and random numbers) or the information is concealed (i.e., hash digests and encryptions). 
+an abstract representation of these structures. From a message, additional messages may be inferred. For example, given a message in the form \verb|signature m k|, the message \verb|m| may be deduced. Whereas given a message in the form \verb|encryptedCredential n g k|, no messages may be deduced. This concept is modeled in two ways: as a recursive function \verb|inferFrom| and as an inductive proposition \verb|inferrable|. These two definitions are proven to be equivalent and so may be used interchangeably. In particular, additional information may be gained from signatures, TPM2B\_Attest structures, certificate signing requests (CSRs), public key certificates, and pairs of messages. All other messages either contain no additional information (i.e., keys and random numbers) or the information is concealed (i.e., hash digests and encryptions). These messages are modeled ideally in that a private key reveals nothing about its corresponding public key and that there are no hash collisions.
 
 
 
@@ -33,31 +33,32 @@ Inductive execute : tpm_state * state -> command -> tpm_state * state -> Prop
 \end{lstlisting}
 \caption{Type Signature of Execute Relation}
 \end{figure}
-The \verb|tpm_state| and \verb|state| types are aliases for a list of messages. These types are implemented as a list only for convenience; they are treated as a set in all practical aspects (i.e., ordering and duplicates are ignored). The \verb|tpm_state| type is intended to contain messages that a restricted signing key may operate on. Recall from Section 2.1.1 that these messages may be in one of two forms: (1) objects constructed from TPM-internal data or (2) digests produced by signature hash operations. Messages in form 1 include private keys and PCRs (although the latter are not yet included in this model). 
+The \verb|tpm_state| and \verb|state| types are aliases for a list of messages. These types are implemented as a list only for convenience; they are treated as a set in all practical aspects (i.e., ordering and duplicates are ignored). The \verb|tpm_state| type is intended to contain messages that a restricted signing key may operate on. Recall from Section 2.1.1 that these messages may be in one of two forms: (1) objects constructed from TPM-internal data or (2) digests produced by signature hash operations. Messages in form 1 include private keys and PCRs --- although the latter are not yet included in this model. 
 %These include objects that reside within the TPM (i.e., those that begin with the \verb|TPM_Generated| value) such as private keys and PCRs (although the latter are not yet included in this model). And, furthermore, these include hash digests produced by a signature hash operation.
 
 Due to the abstract, symbolic nature of this model, several TPM commands are intentionally excluded from the \verb|command| type. This results specifically from an inability to truly capture the cryptographic properties of randomness. Randomness plays a vital role in the real-life implementation of keys and nonces, that is, it prevents a key or nonce from being guessed. Since I am unable to preserve this property in the model, I choose to eliminate all commands which generate a key or nonce. Therefore, a message of either of these types must be generated from or inferred from some other message or be in the initial state. 
-\begin{figure}[h]
-\begin{lstlisting}[language=Coq]
-Inductive command : Type :=
-| TPM2_Hash : message -> command
-| CheckHash : message -> message -> command
-| TPM2_Sign : message -> privKey -> command
-| TPM2_Certify : pubKey -> privKey -> command
-| CheckSig : message -> pubKey -> command
-| TPM2_MakeCredential : message -> randType -> pubKey -> command
-| TPM2_ActivateCredential : message -> privKey -> privKey -> command
-| MakeCSR_IDevID : identifier -> signedCert -> pubKey -> command
-| MakeCSR_LDevID : message -> signedCert -> command
-| CheckCert : signedCert -> pubKey -> command
-| CheckAttributes : pubKey -> Restricted -> Sign -> Decrypt -> FixedTPM -> command
-| MakePair : message -> message -> command.
-\end{lstlisting}
-\caption{Model of Commands}
-\end{figure}
+
 Each command included in this model corresponds with exactly one constructor in the \verb|execute| relation (excluding \verb|TPM2_Sign| which corresponds with two). Each constructor possesses its own distinctive conditions which must be met for execution to be successful. These conditions are manifested in several ways: constructors pattern match on the command's inputs, some of these inputs are required to be in the initial state, and the results must be added to the final state. 
 %For one, constructors pattern match on a command's inputs. Additionally, certain messages may be required to be in the initial \verb|tpm_state| or \verb|state|. And lastly, the command's results must be added to the final \verb|tpm_state| or \verb|state|.
 
+\begin{figure}[h]
+  \begin{lstlisting}[language=Coq]
+  Inductive command : Type :=
+  | TPM2_Hash : message -> command
+  | CheckHash : message -> message -> command
+  | TPM2_Sign : message -> privKey -> command
+  | TPM2_Certify : pubKey -> privKey -> command
+  | CheckSig : message -> pubKey -> command
+  | TPM2_MakeCredential : message -> randType -> pubKey -> command
+  | TPM2_ActivateCredential : message -> privKey -> privKey -> command
+  | MakeCSR_IDevID : identifier -> signedCert -> pubKey -> command
+  | MakeCSR_LDevID : message -> signedCert -> command
+  | CheckCert : signedCert -> pubKey -> command
+  | CheckAttributes : pubKey -> Restricted -> Sign -> Decrypt -> FixedTPM -> command
+  | MakePair : message -> message -> command.
+  \end{lstlisting}
+  \caption{Model of Commands}
+  \end{figure}
 
 
 
@@ -70,7 +71,7 @@ The \verb|TPM2_Sign| command generates a signature over a message using the spec
 The \verb|TPM2_Certify| command proves than an object is loaded in the TPM by producing a signed \verb|TPM2B_Attest| structure. The command requires two inputs: a public key to be certified and a private key to sign the attestation structure. The private key must have the \verb|Sign| attribute set and must be loaded on the TPM. Upon recieving a request to execute the \verb|TPM2_Certify| command, the TPM verifies that the inverse of the public key parameter is loaded on the TPM as well. Messages produced by the \verb|TPM2_Sign| and \verb|TPM2_Certify| commands are defined using the \verb|signature| constructor. A signature may be verified against a public key using the \verb|CheckSig| command. If the provided public key is the inverse of the private key which performed the signature, then the check succeeds.
 
 
-The \verb|TPM2_MakeCredential| command is used when a remote entity, especially a CA, desires to affirm that some private key is loaded on the same TPM as a particular EK. This command requires three inputs: the cryptographic name of a key to be credentialed, a secret, and a public EK. The cryptographic name of a key is produced by hashing its public area with its associated hash algorithm and prepending the Algorithm ID of the hashing algorithms. This command produces an encrypted credential. This command guarantees that the secret is only released from the credential blob if the credentialed key is loaded on the same TPM as the EK.
+The \verb|TPM2_MakeCredential| command is used when a remote entity, especially a CA, desires to affirm that some private key is loaded on the same TPM as a particular EK. This command requires three inputs: the cryptographic name of a key to be credentialed, a secret, and a public EK. The cryptographic name of a key is produced by hashing its public area with its associated hash algorithm and prepending the Algorithm ID of the hashing algorithm. This command produces an encrypted credential. This command guarantees that the secret is only released from the credential blob if the credentialed key is loaded on the same TPM as the EK.
 The \verb|TPM2_ActivateCredential| command is used by the recipient of an encrypted credential to release the secret. When executing the \verb|TPM2_ActivateCredential| command, the TPM first decrypts the blob with the EK then verifies that the private key corresponding with the name field is loaded on the TPM as well. The secret is only release if both of these steps succeed. The secret value may then be returned to the remote CA so that they may validate the result.
 
 
@@ -78,8 +79,7 @@ The \verb|MakeCSR_IDevID| command produces a \verb|TCG_CSR_IDevID| structure con
  A \verb|TCG_CSR_IDevID| is a certificate signing request (CSR) which contains the data required to couple an IAK to a TPM-containing device. Additionally, it may include the certification information for an IDevID if one wishes to produce both the IAK and IDevID certificates in a single pass. In particular, this structure is used any time an enrollment process uses the EK certificate. The Trusted Computing Group (TCG) defines a C typedef structure to group all of the fields. In the model, I only include the fields necessary for creating an IAK certificate (i.e., device-identifying information, an EK certificate, and a public key to be certified). The \verb|MakeCSR_LDevID| command is very similar to the \verb|MakeCSR_IDevID| command except it produces a \verb|TCG_CSR_LDevID| structure which includes the certification information for an LAK or LDevID. In the model, I only include the fields necessary for creating an LAK certificate (i.e., a signed \verb|TPM2B_Attest| structure and an IAK certificate).
 
 The \verb|CheckCert| command verifies a signature over a certificate against a public key. One should check an EK certificate against the public key of the TPM Manufacturer's CA, an IAK or IDevID certificate against the public key of the OEM's CA, and an LAK or LDevID certificate against the public key of the Owner's CA.
-
-The \verb|CheckAttributes| command verifies that a public key has all of the provided attributes. In practice, this is done by checking the \verb|TPMA_Object|  bits of the key. In the model, these values are stored within the \verb|Restricted|, \verb|Sign|, \verb|Decrypt|, and \verb|FixedTPM| fields of the \verb|pubKey| type. In order to check the attributes of a particular key, one must have have knowledge of that key. The key need not be loaded on one's own TPM though since this command is typically used to check the attributes of some external entity's key. The model requires specifically that the initial \verb|state| contains the public key to be checked. The \verb|MakePair| command combines two messages into a single message using the \verb|pair| constructor.
+The \verb|CheckAttributes| command verifies that a public key has all of the provided attributes. In practice, this is done by checking the \verb|TPMA_Object|  bits of the key. In the model, these values are stored within the \verb|Restricted|, \verb|Sign|, \verb|Decrypt|, and \verb|FixedTPM| fields of the \verb|pubKey| type. In order to check the attributes of a particular key, one must have have knowledge of that key. The key need not be loaded on one's own TPM though since this command is typically used to check the attributes of some external entity's key. The model requires specifically that the initial \verb|state| contain the public key to be checked. And lastly, the \verb|MakePair| command combines two messages into a single message using the \verb|pair| constructor.
 
 
 
@@ -121,7 +121,7 @@ Inductive seq_execute : tpm_state * state -> sequence -> tpm_state * state -> Pr
 \end{figure}
 Sequential execution is done by first executing the command at the head of the list using the single command execution relation \verb|execute| followed by executing the sequence at the tail of the list using the sequential execution relation \verb|seq_execute|. The final state pair produced by executing the single command is used as the initial state pair for the subsequent sequence. This recursive structure allows for the convenient use of induction in many proofs.
 %The \verb|seq_execute| relation executes the command at the head of the list using the \verb|execute| relation then recursively uses the \verb|seq_execute| relation to execute the tail of the list using the resulting final state pair as the initial state.
-In fact, I prove several interesting and useful facts about the \verb|seq_execute| relation. Firstly, sequential execution is deterministic. Given an initial state pair and a command sequence, there is at most one final state pair which satisfies the \verb|seq_execute| relation. This means that \verb|seq_execute| is a partial function. Next, sequential execution is an expansion. Given a related initial state pair, command sequence, and final state pair, the initial state is always a subset of the final state (i.e., \verb|seq_execute| expands on the initial state). This means that commands do not remove elements from the state.  
+In fact, I prove several interesting and useful facts about the \verb|seq_execute| relation. First, sequential execution is deterministic. Given an initial state pair and a command sequence, there is at most one final state pair which satisfies the \verb|seq_execute| relation. This means that \verb|seq_execute| is in fact a partial function. Next, sequential execution is an expansion. Given a related initial state pair, command sequence, and final state pair, the initial state is always a subset of the final state (i.e., \verb|seq_execute| expands on the initial state). This means that commands do not remove elements from the state.  This property may not be contained in future iterations of this model; it does seem possible that addition of new commands may result in the removal of elements from an entity's state.
 %Furthermore, sequential execution cannot generate encrypted credentials without a nonce in the initial \verb|state| and cannot generate nonces without an encrypted credential in the initial \verb|state|.  Finally, sequential execution cannot generate keys. This last feature is due to the deliberate exclusion of certain TPM commands from the language.
 \begin{figure}[h]
 \begin{lstlisting}[language=Coq]
@@ -136,6 +136,9 @@ Theorem seq_exec_expansion : forall iniTPM ini s finTPM fin,
 \end{lstlisting}
 \caption{Properties of Sequential Execution}
 \end{figure}
+First, sequential execution is deterministic. Given an initial state pair and a command sequence, there is at most one final state pair which satisfies the \verb|seq_execute| relation. This means that \verb|seq_execute| is in fact a partial function. Next, sequential execution is an expansion. Given a related initial state pair, command sequence, and final state pair, the initial state is always a subset of the final state (i.e., \verb|seq_execute| expands on the initial state). This means that commands do not remove elements from the state.  This property may not be contained in future iterations of this model; it does seem possible that some commands may result in the removal of elements from an entity's state.
+
+
 
 It is useful to know whether a particular command is contained within a sequence. Therefore, I define a function \verb|command_in_sequence| which determines whether a provided command is an element of a provided sequence. This function is implemented by checking the command at the head of the list against the provided command. If they match, return True. Otherwise, recursively call the function on the tail of the sequence.
-For two commands to match, not only must the commands itself match but all of their inputs as well. To precisely describe this situation, this function utilizes the decidable equality property over the \verb|command| type. This requires declaring and proving that the \verb|command| type and all of the types it relies on (e.g., message, pubKey, signedCert) a member of the \verb|DecEq| class. These proofs may be conveniently automated.
+For two commands to match, not only must the commands itself match but all of their inputs as well. To precisely describe this situation, this function utilizes the decidable equality property over the \verb|command| type. This requires declaring and proving that the \verb|command| type and all of the types it relies on (e.g., \verb|message|, \verb|pubKey|, \verb|signedCert|) is a member of the \verb|DecEq| class. These proofs may be conveniently automated.

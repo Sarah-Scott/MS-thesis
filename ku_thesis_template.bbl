@@ -2,18 +2,18 @@
 
 \bibitem[Arthur et~al., 2015]{PracticalGuide}
 Arthur, W., Challener, D., \& Goldman, K. (2015).
-\newblock {\em A Practical Guide to TPM 2.0: Using the Trusted Platform Module
-  in the New Age of Security}.
+\newblock {\em {A Practical Guide to TPM 2.0: Using the Trusted Platform Module
+  in the New Age of Security}}.
 \newblock Apress.
 
 \bibitem[Barker, 2020]{KeyManagement}
 Barker, E. (2020).
-\newblock Recommendation for key management.
+\newblock {Recommendation for Key Management}.
 \newblock {\em NIST Special Publication 800-57 Part 1 Revision 5}.
 
 \bibitem[Chen \& Warinschi, 2010]{PrivacyCAAnalysis-Chen}
 Chen, L. \& Warinschi, B. (2010).
-\newblock Security of the tcg privacy-ca solution.
+\newblock {Security of the TCG Privacy-CA Solution}.
 \newblock In {\em 2010 IEEE/IFIP International Conference on Embedded and
   Ubiquitous Computing}  (pp.\ 609--616).
 
@@ -66,17 +66,17 @@ Shao, J., Qin, Y., Feng, D., \& Wang, W. (2015).
 
 \bibitem[{Trusted Computing Group}, 2019]{TPMSpec}
 {Trusted Computing Group} (2019).
-\newblock {\em Trusted Platform Module Library Specification, Family 2.0, Level
-  00, Revision 01.59}.
+\newblock {\em {Trusted Platform Module Library Specification, Family 2.0,
+  Level 00, Revision 01.59}}.
 
 \bibitem[{Trusted Computing Group}, 2021a]{EKSpec}
 {Trusted Computing Group} (2021a).
-\newblock {\em TCG EK Credential Profile For TPM Family 2.0, Level 00, Version
-  2.4, Revision 3}.
+\newblock {\em {TCG EK Credential Profile For TPM Family 2.0, Level 00, Version
+  2.4, Revision 3}}.
 
 \bibitem[{Trusted Computing Group}, 2021b]{DevIDSpec-TCG}
 {Trusted Computing Group} (2021b).
-\newblock {\em TPM 2.0 Keys for Device Identity and Attestation}.
+\newblock {\em {TPM 2.0 Keys for Device Identity and Attestation}}.
 
 \bibitem[Wesemeyer et~al., 2020]{DAAAnalysis-Wes}
 Wesemeyer, S., Newton, C.~J., Treharne, H., Chen, L., Sasse, R., \& Whitefield,
@@ -90,7 +90,7 @@ Wesemeyer, S., Newton, C.~J., Treharne, H., Chen, L., Sasse, R., \& Whitefield,
 \bibitem[Whitefield et~al., 2019]{DAAAnalysis-Whit}
 Whitefield, J., Chen, L., Sasse, R., Schneider, S., Treharne, H., \& Wesemeyer,
   S. (2019).
-\newblock A symbolic analysis of ecc-based direct anonymous attestation.
+\newblock {A Symbolic Analysis of ECC-Based Direct Anonymous Attestation}.
 \newblock In {\em 2019 IEEE European Symposium on Security and Privacy
   (EuroS\&P)}  (pp.\ 127--141).
 

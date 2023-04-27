@@ -2,15 +2,17 @@
 
 % fix
 
-Development and deployment of trusted systems often require definitive identification of devices. A remote entity should have confidence that a device is as it claims to be. An ideal method for fulfulling this need is through the utilization of TPM keys as secure device identitifiers. A secure device identifier (DevID) is defined as an identifier that is cryptographically bound to a device. 
+%Development and deployment of trusted systems often require definitive identification of devices. A remote entity should have confidence that a device is as it claims to be. An ideal method for fulfulling this need is through the utilization of TPM keys as secure device identitifiers. 
+A secure device identifier (DevID) is defined as an identifier that is cryptographically bound to a device. TPM keys are an ideal choice for implementation of these identifiers.
 %A DevID must not be transferable from one device to another as that would allow distinct devices to be identified as the same. Since the Trusted Platform Module (TPM) is a secure Root of Trust for Storage, it provides the necessary protections for storing these identifiers. Consequently, the Trusted Computing Group (TCG) recommends the use of TPM keys for DevIDs. 
-The TCG's specification "TPM 2.0 Keys for Device Identity and Attestation" describes several methods for remotely proving a key to be resident in a specific device's TPM. These methods are carefully constructed protocols which are intended to be performed by a trusted Certificate Authority (CA) in communication with a certificate-requesting device. DevID certificates provisioned by an OEM at device manufacturing time may be used to provide definitive evidence to a remote entity that a key belongs to a specific device. Whereas DevID certificates provisioned by a device owner require a chain of certificates in order to verify a chain of trust to an OEM-provided root certificate. This distinction is due to the differences in the respective protocols prescribed by the TCG's specification. \textit{I aim to abstractly model these DevID-provisioning protocols and formally verify their resulting assurances}. I choose this goal since the TCG themselves do not provide any proofs or clear justifications for how the protocols might provide these assurances. The resulting command library and execution relation modeled in Coq may easily be expanded upon to become useful in verifying a wide range of properties regarding DevIDs and TPMs.
+The TCG's specification "TPM 2.0 Keys for Device Identity and Attestation" describes several methods for remotely proving a key to be resident in a specific device's TPM and thus to satisfy the requirements for a DevID. These methods are carefully constructed protocols which are intended to be performed by a trusted Certificate Authority (CA) in communication with a certificate-requesting device. DevID certificates provisioned by an OEM at device manufacturing time should provide definitive evidence that a key belongs to a specific device. Whereas DevID certificates provisioned by a device owner require a chain of certificates in order to verify a chain of trust to an OEM-provided root certificate. This distinction is due to the differences in the respective protocols prescribed by the TCG's specification. \textit{I aim to abstractly model these DevID-provisioning protocols and formally verify their resulting assurances}. I choose this goal since the TCG themselves do not provide any proofs or clear justifications for how the protocols might provide these assurances. 
+%The resulting command library and execution relation modeled in Coq may easily be expanded upon to become useful in verifying a wide range of properties regarding DevIDs and TPMs.
 \end{abstractlong}
 
 
 
 
 \begin{acknowledgementslong}
-
+I would like to thank my husband for his endless support. I believe he now knows as much as I do on this topic.
 \end{acknowledgementslong}
 

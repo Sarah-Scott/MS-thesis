@@ -1,7 +1,5 @@
 \chapter{Identity Provisioning}
 
-% elaborate on supersequence
-% COMPLETE IAK SECTION
 
 To mantain a cryptographic evidentiary chain linking a DevID to a specific TPM and device, the CA should follow certain provisioning protocols. The TCG describes several such protocols in their specification "TPM 2.0 Keys for Device Identity and Attestation". 
 This chapter considers two of these protocols in detail: OEM creation of an IAK certificate based on an EK certificate and Owner creation of an LAK certificate based on an IAK certificate. I select these two protocols since they bear the most significance in enrollment of additional DevIDs (recall that, in a chain of certificates, IAK certificates may be root nodes and LAK certificates may be parent nodes). For each protocol, the specification outlines steps for the CA and the certificate-requesting entity to perform.
@@ -22,7 +20,7 @@ For convenience and clarity, this chapter inspects each of these protocols in th
 \section{Owner Creation of LAK Certificate based on IAK Certificate}
 
 %The TCG's specification claims that the following procedure guarantees that the new LAK is  loaded on the same TPM as the IAK.
-The TCG's specification claims that the below procedure provides the following assurances: (A) the LAK has good attributes and (B) the new LAK is  loaded on the same TPM as the IAK. These assurances correspond exactly with the Chain of Trust line C in Figure \ref{fig:cert_rel}. 
+The TCG's specification claims that the below procedure provides the following assurances: (A) the LAK has good attributes and (B) the LAK is  loaded on the same TPM as the IAK. These assurances correspond exactly with the Chain of Trust line C in Figure \ref{fig:cert_rel}. 
 \begin{enumerate}[itemsep=0pt,parsep=0pt,partopsep=0pt]
   \setcounter{enumi}{-1}
   \item The Owner creates and loads the LAK
@@ -215,7 +213,7 @@ In conclusion, this procedure uses the previously-certified IAK to prove that th
 
 \newpage
 \section{OEM Creation of IAK Certificate based on EK Certificate}
-The TCG's specification claims that the below procedure provides the following assurances: (A) the IAK has good attributes, (B) the new IAK is  loaded on the same TPM as the EK, and (C) the EK certificate is valid. These assurances correspond exactly with the Proof of Residency line A in Figure \ref{fig:cert_rel}. 
+The TCG's specification claims that the below procedure provides the following assurances: (A) the IAK has good attributes, (B) the IAK is  loaded on the same TPM as the EK, and (C) the EK certificate is valid. These assurances correspond exactly with the Proof of Residency line A in Figure \ref{fig:cert_rel}. 
 \begin{enumerate}[itemsep=0pt,parsep=0pt,partopsep=0pt]
   \setcounter{enumi}{-1}
   \item The OEM creates and loads the IAK
@@ -335,14 +333,13 @@ Theorem iak_and_ek_in_TPM : forall s2 s1 iniTPM ini midTPM mid finTPM fin msg id
 \caption{Final Verification Goal for IAK provisioning Protocol}
 \label{fig:iak_goal}
 \end{figure}
-The OEM's final steps are implicit in the fact that the nonce in the challenge blob is the same as the nonce in the OEM's final \verb|state|. 
+The CA's final steps are implicit in the fact that the nonce in the challenge blob is the same as the nonce in the OEM's final \verb|state|. 
 
 
 In order to complete this verification, no further knowledge on the OEM's initial sequence \verb|s1| is needed.
 On the other hand, the OEM's final sequence \verb|s2| must be analyzed.
 I prove that \verb|s2| is a supersequence of the correct final steps of the OEM (i.e., \verb|step7_OEM|). This proof relies on two important, related properties of sequential execution. The first being that one cannot produce a random number in its final \verb|state| without an encrypted credential containing that number in its initial \verb|state|. The next property states approximately the converse of the first, that is, one cannot produce an encrypted credential containing a particular random number in its final \verb|state| without that number or an encrypted credential containing that number in its initial \verb|state|.
-
-Our next step is simply to demonstrate that the OEM must in fact have executed \verb|TPM2_ActivateCredential| on the challenge blob using the private EK and private IAK. This result is a direct consequence of the supersequence conclusion obtained above. Then we need only verify that execution of a sequence containing this command implies that the EK and IAK are loaded on the same TPM. And the composition of each of these small proofs leads to our end goal shown in Figure 
+Our next step is simply to demonstrate that the OEM must in fact have executed \verb|TPM2_ActivateCredential| on the challenge blob using the private EK and private IAK. This result is a direct consequence of the supersequence conclusion. Then we need only verify that execution of a sequence containing this command implies that the EK and IAK are loaded on the same TPM. And the composition of each of these small proofs leads to our end goal shown in Figure 
 \ref{fig:iak_goal}.
 In fact, due to the extra parameters and criteria of the
 \verb|steps_CA| function, the proof statement exactly states that the the inverse of the key contained in
@@ -357,10 +354,27 @@ is guaranteed by the attribute check performed by the CA, Assurance B is guarant
 Restricted attribute on the EK and the nonce contained in the challenge blob which may only be
 released by the \verb|TPM2_ActivateCredential| command, and Assurance C is guaranteed by the signature check and credential encryption performed by the CA.
 
-Although, the IAK certificate identifies a device and is in fact intended to provide definitive evidence that a key belongs to a specific device, the IAK provisioning procedure provides no assurances on device-residency. This recommended procedure does not even include any steps where the CA attempts any form of device identity verification.  Instead the CA fully trusts the OEM to have provided the correct device identifying information. Even the attestation variation of this procedure does not attempt this verification and instead only checks that the device is running appropriate and safe firmware. A fix to this would be for the PCR data to measure the device's serial and model numbers so that each device has a unique hash value and hence the identity can be uniquely determined and proven that the TPM is on that exact device. 
+%Although, the IAK certificate identifies a device and is in fact intended to provide definitive evidence that a key belongs to a specific device, the IAK provisioning procedure provides no assurances on device-residency. This recommended procedure does not even include any steps where the CA attempts any form of device identity verification.  Instead the CA fully trusts the OEM to have provided the correct device identifying information. Even the attestation variation of this procedure does not attempt this verification and instead only checks that the device is running appropriate and safe firmware. A fix to this would be for the PCR data to measure the device's serial and model numbers so that each device has a unique hash value and hence the identity can be uniquely determined and proven that the TPM is on that exact device. 
 
-device represented by that identity
 
-tpm binding to the oem device
+
+
+
+This analysis has inadvertently revealed a potential shortcoming of the IAK provisioning procedure: it provides no assurance regarding device-residency.
+The IAK certificate is intended to provide definitive evidence that a key belongs to a specific device, yet the procedure makes no guarantees that the IAK is actually on the device represented by that identity.
+Proving an IAK belongs to a specific device requires first binding the IAK to a specific TPM using the EK and then binding the TPM to a specific device \cite{DevIDSpec-TCG}. 
+But the CA makes no attempt at performing the second part of this process. Instead the CA fully trusts the OEM to have provided the correct device identifying information. 
+Even the attestation variation of the IAK provisioning procedure does not attempt this verification. This variation uses a quote over selected PCRs to verify only that the device is running the appropriate, trusted firmware. All devices with the same model number have an identical golden hash value which represents its expected PCR digest result.
+Although this check guarantees that the TPM containing the IAK is on a specific \textit{type} of device (i.e., a device with that model number), it does not guarantee that the TPM is on a specific device. 
+
+I believe that a small change to the attestation variation of the IAK provisioning procedure can overcome this shortcoming. The TPM should take a measurement which contains the device's serial number. In this way. each individual device has a unique golden hash value, and thus its identity can be uniquely determined.
+Due to the measurement integrity guaranteed by the TPM's PCR mechanism, this modification provides definitive evidence that a key belongs to a specific 
+device, the exact result which an IAK certificate is intented to have.
+%the IAK certificate is intended to have this exact result. 
+%this result is exactly what the IAK certificate is intended to provide.
+The major downfall of this solution is that it requires a very large database of these golden hash values. Therefore, it may be unrealistic and even unnecessary to implement this change in circumstances where a precise device identity is not required.
+% stronger device binding is not required. 
+But this solution may still be useful in high security systems where it is imperative to know the true identity of a device.
+
 
 
