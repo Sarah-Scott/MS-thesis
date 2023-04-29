@@ -13,21 +13,13 @@ Device health attestation data provided by a TPM offers cryptographic proof of s
 
 
 
-
-
-
-\subsection{Keys}
-
-
-
-Since the focus of this paper is on the usage of TPM keys for secure device identifiers, the discussion on cryptographic keys in this section is limited to TPM keys which utilize asymmetric cryptography.  A key may then be created using one of two commands.
+Since the focus of this paper is on the usage of TPM keys for secure device identifiers, the discussion on cryptographic keys in the remainder of this section is limited to keys that utilize asymmetric cryptography.  A key may then be created using one of two commands.
 \begin{itemize}
   \item \verb|TPM2_CreatePrimary|: A Primary key is produced based on the current Primary Seed. A Primary key may be persisted within the TPM. Otherwise it must be recreated after a TPM reset.
   \item \verb|TPM2_Create|: An Ordinary key is produced based on a seed taken from the RNG. An Ordinary key is the child of another key; it is wrapped by that parent key. It may be persisted within the TPM or persisted external to the TPM in the form of an encrypted key blob. The blob is only loadable using the parent key's authorization in the TPM that created it.
 \end{itemize}
-Keys have attributes that are set at creation-time. These attributes are permanent and include the following: \verb|FixedTPM|, \verb|Sign|, \verb|Decrypt|, and \verb|Restricted|. The \verb|FixedTPM| attribute indicates that the private key cannot be duplicated. A key pair with the \verb|Sign| attribute set consists of a private signing key and a public signature-verification key. When properly handled, private signing keys can provide integrity, authenticity, and nonrepudiation. A key pair with the \verb|Decrypt| attribute set consists of a public encryption key and a private decryption key. When properly handled, public encryption keys can provide confidentiality. A key with both the \verb|Sign| and \verb|Decrypt| attributes set is called a Combined key. US NIST SP800-57 disallows the use of Combined keys for the reason that it may weaken the security guarantees associated with one or both of the attributes \cite{KeyManagement}. Furthermore, a key pair may have the \verb|Restricted| attribute set, limiting the operations of the private key to TPM generated data.
-
-The Coq model inductively defines a \verb|pubKey| and \verb|privKey| type for public keys and private keys respectively. A key of either of these types requires a unique identifier and a sequence of boolean values describing whether a particular attribute is set or not set. A key pair consists of a \verb|pubKey| and a \verb|privKey| with the same identifier and attributes. The model does not differentiate between Primary and Ordinary keys.
+Keys have attributes that are set at creation-time. These attributes are permanent and include the following: \verb|FixedTPM|, \verb|Sign|, \verb|Decrypt|, and \verb|Restricted|. The \verb|FixedTPM| attribute indicates that the private key cannot be duplicated. A key pair with the \verb|Sign| attribute set consists of a private signing key and a public signature-verification key. When properly handled, private signing keys can provide integrity, authenticity, and nonrepudiation. A key pair with the \verb|Decrypt| attribute set consists of a public encryption key and a private decryption key. When properly handled, public encryption keys can provide confidentiality. A key with both the \verb|Sign| and \verb|Decrypt| attributes set is called a Combined key. US NIST SP800-57 disallows the use of Combined keys for the reason that it may weaken the security guarantees associated with one or both of the attributes \cite{KeyManagement}. Furthermore, a key pair may have the \verb|Restricted| attribute set, limiting the operations of the private key to TPM-generated data.
+My Coq model inductively defines a \verb|pubKey| and \verb|privKey| type for public keys and private keys respectively. A key of either of these types requires a unique identifier and a sequence of boolean values describing whether a particular attribute is set or not set. A key pair consists of a \verb|pubKey| and a \verb|privKey| with the same identifier and attributes. The model does not differentiate between Primary and Ordinary keys.
 \begin{figure}[h]
 \begin{lstlisting}[language=Coq]
 Inductive pubKey : Type :=
@@ -44,11 +36,8 @@ Inductive privKey : Type :=
 %The \verb|Restricted| attribute can provide important security implications. A restricted signing key may only sign a digest that has been produced by the TPM. Enforcement of this constraint is reliant on a 4-byte magic value called \verb|TPM_Generated| [\cite{TPMSpec}]. All structures that the TPM constructs from internal data begins with this value. Such structures include keys, platform configuration registers (PCRs), and audit digests. These structures contribute to two primary use cases for restricted signing keys: (1) key certification and (2) attestation. Use case 1 proves that a new key resides in the same TPM as some known restricted key. Use case 2 utilizes the \verb|Restricted| attribute to provide assurance that a signature over PCRs or audit logs was in fact over a digest generated by that particular TPM. Additionally, a restricted signing key can sign data supplied to the TPM externally by using the \verb|TPM2_Hash| command. In this case the \verb|TPM2_Hash| command produces a ticket asserting that the TPM itself calculated this hash and will later sign it. A restricted signing key will not sign external data without this ticket. To prevent spoofing of another TPM's internal data as one's own, the \verb|TPM2_Hash| command will only produce a ticket if the external data does not begin with the \verb|TPM_Generated| value.
 
 The \verb|Restricted| attribute provides important security implications. A restricted signing key may only sign a digest that has been produced by the TPM. Enforcement of this constraint is reliant on a 4-byte magic value called \verb|TPM_Generated| \cite{TPMSpec}. All structures that the TPM constructs from internal data begins with this value. Such structures include keys and PCRs. These structures result in several interesting and significant uses for restricted signing keys, namely key certification and attestation. In particular, a restricted signing key is used during key certification to prove that a new key is loaded on the same TPM as itself. And during attestation, a restricted signing key is used to prove that a quote is the result of the PCR values within the same TPM as itself. Additionally, a restricted signing key has the ability to sign data supplied to the TPM externally by using the \verb|TPM2_Hash| command. When used for this purpose, the hash operation is called a signature hash. The \verb|TPM2_Hash| command produces a ticket asserting that the TPM itself calculated this hash and will later sign it. A restricted signing key will not sign external data without this ticket. To prevent spoofing of another TPM's internal data as one's own, the \verb|TPM2_Hash| command only produces a ticket if the external data does not begin with the \verb|TPM_Generated| value.
-
-
-A restricted decryption key is called a storage key. Only storage keys can be used as parents to create or load child objects or to activate credentials \cite{PracticalGuide}. All TPMs are shipped with an essential storage key: the endorsement key. The endorsement key (EK) is installed by the TPM manufacturer and stored in a shielded location on the TPM. The corresponding EK certificate serves a significant role in the enrollment of secure device identifiers. 
-This process will be discussed in further detail in later sections.
-
+A restricted decryption key is called a storage key. Only storage keys can be used as parents to create or load child objects or to activate credentials \cite{PracticalGuide}. All TPMs are shipped with an essential storage key: the endorsement key. The endorsement key (EK) is installed by the TPM manufacturer and stored in a shielded location on the TPM. The corresponding EK certificate serves a significant role in the creation of DevID certificates. 
+This process will be discussed in detail in later sections.
 
 
 
@@ -56,11 +45,12 @@ This process will be discussed in further detail in later sections.
 
 
 
+\vspace{2em}
 \section{Logical Foundation of Coq}
 
 
 
-The Calculus of Inductive Constructions (CIC) is the underlying formalism of the interactive proof assistant Coq \cite{CIC}. This section shall not discuss this logical system in great detail and instead focuses only on the aspects which are relevant to this work. In particular, this section examines the sort \verb|Prop| and the interesting ways in which it is utilized. The sort \verb|Prop| is the universe of logical propositions. Inductive definitions may be used together with the sort \verb|Prop| to define relations. These relations are called inductive propositions. Some inductive propositions are defined in Coq's standard library while others must be defined by the user. One simple yet important inductive proposition in Coq's standard library is the definition of equality. 
+The Calculus of Inductive Constructions (CIC) is the underlying formalism of the interactive proof assistant Coq \cite{CIC}. This section shall not discuss this logical system in great detail and instead focuses only on the aspects that are relevant to this work. In particular, this section examines the sort \verb|Prop| and the interesting ways in which it is utilized. The sort \verb|Prop| is the universe of logical propositions. Inductive definitions may be used together with the sort \verb|Prop| to define relations. These relations are called inductive propositions. Some inductive propositions are defined in Coq's standard library while others must be defined by the user. One simple yet important inductive proposition in Coq's standard library is the definition of equality. 
 \begin{figure}[h]
 \begin{lstlisting}[language=Coq]
 Inductive eq {A : Type} (x : A) : A -> Prop :=

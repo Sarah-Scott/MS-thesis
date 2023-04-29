@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2022.12.1)  27 APR 2023 18:01
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2022.12.1)  28 APR 2023 18:30
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -594,17 +594,17 @@ Overfull \hbox (1.43027pt too wide) in paragraph at lines 6--8
 [4
 
 ]
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 25.
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 18.
  (/usr/share/texmf/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
-) [5]
+)
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 34.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 26.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 34.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 26.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 34.
- [6] [7]) (./chap_3/chap_3.tex [8]
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 26.
+ [5] [6] [7]) (./chap_3/chap_3.tex [8]
 Chapter 3.
 [9
 
@@ -615,76 +615,67 @@ File: t1lmss.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <5> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 25.
- [10] [11] [12]
-<chap_3//chap_3_figures/certificateRelationships.jpg, id=276, 637.78275pt x 351.714pt>
+ [10] [11]
+<chap_3//chap_3_figures/certificateRelationships.jpg, id=255, 637.78275pt x 351.714pt>
 File: chap_3//chap_3_figures/certificateRelationships.jpg Graphic file (type jpg)
 <use chap_3//chap_3_figures/certificateRelationships.jpg>
-Package pdftex.def Info: chap_3//chap_3_figures/certificateRelationships.jpg  used on input line 133.
+Package pdftex.def Info: chap_3//chap_3_figures/certificateRelationships.jpg  used on input line 127.
 (pdftex.def)             Requested size: 469.75502pt x 259.06215pt.
- [13 <./chap_3//chap_3_figures/certificateRelationships.jpg>]) (./chap_4/chap_4.tex [14]
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[12] [13 <./chap_3//chap_3_figures/certificateRelationships.jpg>]) (./chap_4/chap_4.tex [14]
 Chapter 4.
 [15
 
-] [16] [17] [18]
+] [16] [17] [18] [19]
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[19]
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[20]) (./chap_5/chap_5.tex [21]
+) (./chap_5/chap_5.tex [20] [21]
 Chapter 5.
 [22
 
 ] [23]
-Overfull \hbox (39.72446pt too wide) in paragraph at lines 92--93
+Overfull \hbox (39.72446pt too wide) in paragraph at lines 90--91
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (28.75484pt too wide) in paragraph at lines 98--99
+Overfull \hbox (28.75484pt too wide) in paragraph at lines 96--97
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (9.33769pt too wide) in paragraph at lines 103--104
+Overfull \hbox (9.33769pt too wide) in paragraph at lines 101--102
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-[24]
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
+[24]
 
-Overfull \hbox (6.2103pt too wide) in paragraph at lines 129--132
-[][]\T1/lmtt/m/n/12 CheckAttributes k Restricting Signing NonDecrypting Fixing []\T1/ptm/m/n/12 in the CA's func-tion cor-
- []
+LaTeX Warning: Text page 25 contains only floats.
 
-[25]
-
-LaTeX Warning: Text page 26 contains only floats.
-
-[26] [27] [28] [29] [30] [31]
-Overfull \hbox (44.30112pt too wide) in paragraph at lines 269--270
+[25] [26] [27] [28] [29] [30] [31]
+Overfull \hbox (44.30112pt too wide) in paragraph at lines 263--264
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (6.61134pt too wide) in paragraph at lines 294--295
+Overfull \hbox (6.61134pt too wide) in paragraph at lines 288--289
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
 [32] [33]
-Overfull \hbox (7.99426pt too wide) in paragraph at lines 321--322
+Overfull \hbox (7.99426pt too wide) in paragraph at lines 315--316
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (1.19121pt too wide) in paragraph at lines 327--328
+Overfull \hbox (1.19121pt too wide) in paragraph at lines 321--322
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
@@ -696,21 +687,21 @@ Chapter 6.
 
 ]) [40] (./ku_thesis_template.aux)
 Package rerunfilecheck Info: File `ku_thesis_template.out' has not changed.
-(rerunfilecheck)             Checksum: 506D720F566CE1171FDCAE24B6D5F2D6;2331.
+(rerunfilecheck)             Checksum: DFB1CA543DBCB939ED6AF0FC65118598;2106.
  ) 
 Here is how much of TeX's memory you used:
- 16402 strings out of 480247
- 256783 string characters out of 5896151
- 595679 words of memory out of 5000000
- 33689 multiletter control sequences out of 15000+600000
+ 16397 strings out of 480247
+ 256709 string characters out of 5896151
+ 587714 words of memory out of 5000000
+ 33687 multiletter control sequences out of 15000+600000
  524831 words of font info for 119 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 72i,9n,80p,1966b,1094s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 72i,9n,80p,1929b,1096s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmss12.pfb></usr/share/texmf/fonts/type1/public/lm/lmss8.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt12.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt8.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on ku_thesis_template.pdf (47 pages, 367871 bytes).
+Output written on ku_thesis_template.pdf (47 pages, 366423 bytes).
 PDF statistics:
- 772 PDF objects out of 1000 (max. 8388607)
- 692 compressed objects within 7 object streams
- 360 named destinations out of 1000 (max. 500000)
- 126 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 765 PDF objects out of 1000 (max. 8388607)
+ 685 compressed objects within 7 object streams
+ 357 named destinations out of 1000 (max. 500000)
+ 110 words of extra memory for PDF output out of 10000 (max. 10000000)
 
