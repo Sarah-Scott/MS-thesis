@@ -5,9 +5,9 @@ A secure device identifier (DevID) is defined as an identifier that is cryptogra
 The binding of a TPM key to a specific device instance is represented by a DevID certificate.
 To know when and by whom DevIDs are typically created, it is useful to briefly consider a simplified version of the process for creating and distributing TPM-containing devices to end users.
 \begin{enumerate}
-  \item\label{ite:idTPM} TPM Manufacturers produce TPM chips according to the international standard. They provision each TPM chip with an EK certificate which binds the EK to a specific TPM. These chips are then distributed to the original equipment manufacturers (OEMs).
-  \item\label{ite:idDevIni} OEMs produce devices (e.g., PCs) with these TPM chips integrated. They provision each TPM chip with one or more DevID certificates which bind a key to a specific device. These devices are then distributed to the end users (Owners).
-  \item\label{ite:idDevLoc} Owners may optionally provision their TPM chip with one or more DevID certificates which bind a key to their specific device.
+  \item\label{ite:idTPM} TPM Manufacturers produce TPM chips according to the international standard. They provision each TPM chip with an EK certificate that binds the EK to a specific TPM. These chips are then distributed to the original equipment manufacturers (OEMs).
+  \item\label{ite:idDevIni} OEMs produce devices (e.g., PCs) with these TPM chips integrated. They provision each TPM chip with one or more DevID certificates that bind a key to a specific device. These devices are then distributed to the end users (Owners).
+  \item\label{ite:idDevLoc} Owners may optionally provision their TPM chip with one or more DevID certificates that bind a key to their specific device.
 \end{enumerate} 
 
 The provisioning of device identification in Steps \ref{ite:idDevIni} and \ref{ite:idDevLoc} is the primary subject of this work. It is important to note that an EK is not a DevID because its associated certificate identifies a TPM not device. 
@@ -24,7 +24,7 @@ When using a TPM key for secure device identity, there are restrictions on the a
     \renewcommand{\arraystretch}{1.5}
     \begin{tabular}{ |c|c|c|c|c|c|c| }
       \hline
-      Key & Type & \verb|FixedTPM| & \verb|Signing| & \verb|Decrypting| & \verb|Restricted| & Creator \\
+      Key & Type & \verb|FixedTPM| & \verb|Sign| & \verb|Decrypt| & \verb|Restricted| & Creator \\
       \hline
       \hline
       EK & Primary       & X &   & X & X & TPM Manufacturer \\
@@ -44,7 +44,7 @@ When using a TPM key for secure device identity, there are restrictions on the a
 \end{table}
 
  
- An IAK should be used only for the certification of new DevIDs and even then should only be used sparingly to limit the chances of compromise. Similarly, an IDevID should be used sparingly but instead for device authentication in an enterprise network. Since an Owner may create LAKs and LDevIDs as often as needed, these DevIDs may be used freely. Although, it is still recommended that any given DevID---LAK and LDevID included---be used in only a single application. The reason for this recommendation is that it might be possible to gather a lot of data about a device and/or user when the same identity is used for multiple applications \cite{DevIDSpec-TCG}. An LAK is intended to be used for the purposes of attestation as well as for the certification of new DevIDs. While an LDevID is intended to be used for any general device authentication purposes.
+ An IAK should be used only for the certification of new DevIDs and even then should only be used sparingly to limit the chances of compromise. Similarly, an IDevID should be used sparingly but instead for device authentication in an enterprise network. Since an Owner may create LAKs and LDevIDs as often as needed, these DevIDs may be used freely. Although, it is still recommended that any given DevID---LAK and LDevID included---be used in only a single application. The reason for this recommendation is that it might be possible to gather a lot of data about a device and/or user when the same identity is used for multiple applications \cite{KeyManagement}. An LAK is intended to be used for the purposes of attestation as well as for the certification of new DevIDs. While an LDevID is intended to be used for any general device authentication purposes.
 
 The issuers of  certificates are known as Certificate Authorities (CAs). CAs are further identified by the creator of the keys that they certify (i.e., the CA that issues certificates for EKs is known as the TPM Manufacturer's CA, the CA that issues certificates for IAKs and IDevIDs is known as the OEM's CA, and the CA that issues certificates for LAKs and LDevIDs is known as the Owner's CA). All CAs should support a standard certificate transport protocol that provides confidentiality, integrity, and protection from replay attacks \cite{DevIDSpec-TCG}. These transport protocols are outside the scope of this paper, and so this work assumes CAs to be following this recommendation precisely. All CAs should have a Certificate Practice Statement (CPS) which states the CA's provisioning procedures.  The TPM Manufacturer's CA and OEM's CA must both be particularly scrupulous due to the important security and identity implications provided by the certificates they issue. The trustworthiness of a certificate is directly reliant on the diligency and rigor of the CA that issued the certificate. A CA's CSP is vital for making an informed trust decision regarding a given certificate.
 %The Owner's CA is not typically held to as high of a standard as these other CAs. 
